@@ -37,6 +37,7 @@
 #include <stdio.h>
 #include <GL/glu.h>
 #include <GL/gl.h>
+#include <GL/glext.h>
 #ifdef USE_WIN //HS
 	#include <GL/glext.h>
  #include <fcntl.h>
