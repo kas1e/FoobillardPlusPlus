@@ -1810,7 +1810,9 @@ int load_config( char *** confv, int * confc, char ** argv, int argc )
         *confc=argc;
 /*      fprintf(stderr,"no rc file found\n");*/
     }
-    return (f!=NULL);
+    if(f) {
+        fclose(f);
+    }
 }
 
 
