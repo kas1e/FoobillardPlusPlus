@@ -95,8 +95,6 @@ menuType * menu_new( void (* callback)( int, void *, VMfloat ) )
     menu->callback     = callback;
     menu->parent       = (menuType *)0;
     menu->parent_entry = 0;
-    #endif
-
     return menu;
 }
 
