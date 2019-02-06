@@ -28,8 +28,8 @@
 #include <unistd.h>
 #include <getopt.h>
 #include <string.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_syswm.h>
+#include <SDL.h>
+#include <SDL_syswm.h>
 #ifdef USE_WIN
   #include <windows.h>
   #include <shellapi.h>
@@ -60,7 +60,14 @@ static int vidmode_bpp=0;
 static int sdl_on = 0;
 static int check_SDL;           // check for mousebutton for manual from fullscreen
 static int ignore = 0;          // SDL bug set videomode calls reshape event twice SDL 1.2.8 and > ?
+
+#ifdef USE_SDL2
+SDL_Window    *glWindow = NULL;
+SDL_GLContext glContext = NULL;
+#else
 SDL_Surface * vid_surface = NULL;
+#endif
+
 
 /***************************************************
  *    replace a string (max. 2048 Bytes long)       *
@@ -147,7 +154,7 @@ void init_browser(void) {
  ***********************************************************************/
 
 void get_browser(char *strpointer) {
-	 strcpy(strpointer,browser);
+    strcpy(strpointer,browser);
 }
 
 /***********************************************************************
@@ -181,6 +188,15 @@ void sys_exit( int code )
 #ifdef NETWORKING
       SDLNet_Quit();  //in case of open Netgame
 #endif
+#ifdef USE_SDL2
+        if(glContext)
+            SDL_GL_DeleteContext(glContext);
+        glContext = NULL;
+        if(glWindow)
+            SDL_DestroyWindow(glWindow);
+        glWindow = NULL;
+#endif
+
       SDL_Quit( );
   }
 
@@ -194,6 +210,46 @@ void sys_exit( int code )
 
 void sys_create_display(int width,int height)
 {
+
+#ifdef USE_SDL2
+
+  if( SDL_Init( SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_AUDIO) < 0 ) {
+    fprintf( stderr, "Video or Audio initialization failed: %s\n",
+
+    SDL_GetError( ) );
+    sys_exit(1);
+  }
+
+  sdl_on = 1 ; 
+
+  SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 5 );
+  SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 5 );
+  SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
+  SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
+  SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
+
+  if(fullscreen == 1) { 
+        glWindow = SDL_CreateWindow("Foobillard++", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_FULLSCREEN);
+        SDL_SetWindowSize(glWindow, width, height); 
+        SDL_SetWindowFullscreen(glWindow, SDL_WINDOW_FULLSCREEN); 
+
+  } else if (fullscreen == 0) { 
+        glWindow = SDL_CreateWindow("Foobillard++", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
+  };
+  
+  glContext = SDL_GL_CreateContext(glWindow);
+  SDL_GL_MakeCurrent(glWindow, glContext); 
+  
+  SDL_SetWindowTitle(glWindow, "Foobillard++");
+
+  glPolygonMode(GL_FRONT,GL_FILL);  // fill the front of the polygons
+  glPolygonMode(GL_BACK,GL_LINE);   // only lines for back (better seeing on zooming)
+  glCullFace(GL_BACK);              // Standards for rendering only front of textures
+  glEnable(GL_CULL_FACE);
+
+
+#else
+
   /* Information about the current video settings. */
   const SDL_VideoInfo* info = NULL;
   int vidmode_flags=0, samplingerror = 0;
@@ -246,28 +302,28 @@ void sys_create_display(int width,int height)
   SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 5 );
   SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, 16 );
   if (SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 ) <0) {
-  	 fprintf(stderr, "SDL_GL_DOUBLEBUFFER error: %s\n", SDL_GetError());
-  	 options_vsync = 0;
+     fprintf(stderr, "SDL_GL_DOUBLEBUFFER error: %s\n", SDL_GetError());
+     options_vsync = 0;
   } else {
 #ifdef __APPLE__
-	long swapInterval = 1;
-	CGLSetParameter(CGLGetCurrentContext(), kCGLCPSwapInterval, &swapInterval);
+    long swapInterval = 1;
+    CGLSetParameter(CGLGetCurrentContext(), kCGLCPSwapInterval, &swapInterval);
 #endif
 //compile without errors, if SDL is < Version 1.2.10 at compile time
 #if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 && SDL_PATCHLEVEL > 9
 // The next works only with fsaa options off!!!!
   if(!options_fsaa_value) {
-	   if(SDL_GL_SetAttribute( SDL_GL_ACCELERATED_VISUAL, 1 ) < 0 ) {
-				  fprintf( stderr, "Unable to guarantee accelerated visual with libSDL < 1.2.10\n");
-	   }
+       if(SDL_GL_SetAttribute( SDL_GL_ACCELERATED_VISUAL, 1 ) < 0 ) {
+                  fprintf( stderr, "Unable to guarantee accelerated visual with libSDL < 1.2.10\n");
+       }
   }
   if(vsync_supported()) {
-  	 if(options_vsync) {
+     if(options_vsync) {
       if (SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1) < 0) { // since SDL v1.2.10
         fprintf(stderr, "SDL_GL_SWAP_CONTROL error: %s\n", SDL_GetError());
         options_vsync = 0;
       }
-  	 }
+     }
   } else {
     fprintf(stderr,"SDL-System without control of vsync. Scrolling may stutter\n");
   }
@@ -356,6 +412,8 @@ void sys_create_display(int width,int height)
   glPolygonMode(GL_BACK,GL_LINE);   // only lines for back (better seeing on zooming)
   glCullFace(GL_BACK);              // Standards for rendering only front of textures
   glEnable(GL_CULL_FACE);
+  
+#endif //SDL1
 }
 
 /***********************************************************************
@@ -374,20 +432,38 @@ int sys_get_fullscreen(void)
 
 void sys_fullscreen( int fullscr )
 {
+#ifdef USE_SDL2
+    int result;
+
+    if ( fullscr!=0){
+            result = SDL_SetWindowFullscreen(glWindow,SDL_WINDOW_FULLSCREEN);
+            if (result == 0) { /*printf ("switch to FULLSCREEN mode fine!\n");*/
+            } else {
+                printf("Switch to FULLSCREEN mode failed: %s\n", SDL_GetError());
+            }
+    } else if( fullscr==0){
+            result = SDL_SetWindowFullscreen(glWindow,0);
+            if (result == 0) { /*printf ("switch to WINDOW mode fine!\n"*);*/
+            } else {
+                printf("Switch to WINDOW mode failed: %s\n", SDL_GetError());
+            }
+    }
+    fullscreen = fullscr;
+#else
 
 #ifdef USE_WIN
-	   // MS-Windows and SDL 1.2 with OpenGL are not really friends
-	   // and at the time I don't want to rebuild the whole OpenGL context
-	   // so only a window resize to fullscreen and back is done
-	   SDL_SysWMinfo info;
-	   SDL_VERSION(&info.version);
-	   SDL_GetWMInfo(&info);
-	   if(fullscr) {
-	      ShowWindow(info.window, SW_MAXIMIZE);
-	   } else {
+       // MS-Windows and SDL 1.2 with OpenGL are not really friends
+       // and at the time I don't want to rebuild the whole OpenGL context
+       // so only a window resize to fullscreen and back is done
+       SDL_SysWMinfo info;
+       SDL_VERSION(&info.version);
+       SDL_GetWMInfo(&info);
+       if(fullscr) {
+          ShowWindow(info.window, SW_MAXIMIZE);
+       } else {
        ShowWindow(info.window, SW_RESTORE);
-	   }
-	   fullscreen = fullscr;
+       }
+       fullscreen = fullscr;
 #else
     SDL_Surface * screen;
     Uint32 flags;
@@ -396,21 +472,23 @@ void sys_fullscreen( int fullscr )
     flags = screen->flags; /* Save the current flags in case toggling fails */
     SDL_EnableKeyRepeat( 0, 0 );
     if ( fullscr!=0 && (screen->flags & SDL_FULLSCREEN)==0 ){
-    	   screen = SDL_SetVideoMode( 0, 0, 0, screen->flags | SDL_FULLSCREEN );
+           screen = SDL_SetVideoMode( 0, 0, 0, screen->flags | SDL_FULLSCREEN );
     } else if( fullscr==0 && (screen->flags & SDL_FULLSCREEN)!=0 ){
-    	   screen = SDL_SetVideoMode( 0, 0, 0, screen->flags & ~SDL_FULLSCREEN);
+           screen = SDL_SetVideoMode( 0, 0, 0, screen->flags & ~SDL_FULLSCREEN);
     }
     if(screen == NULL) {
-    	   screen = SDL_SetVideoMode(0, 0, 0, flags); /* If toggle FullScreen failed, then switch back */
+           screen = SDL_SetVideoMode(0, 0, 0, flags); /* If toggle FullScreen failed, then switch back */
     } else {
-    	   fullscreen = fullscr;
+           fullscreen = fullscr;
     }
     SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
     if(screen == NULL) {
-    	   fprintf(stderr,"Video-Error on set full-screen/windowed mode. Terminating\n");
-    	   sys_exit(1); /* If you can't switch back for some reason, then epic fail */
+           fprintf(stderr,"Video-Error on set full-screen/windowed mode. Terminating\n");
+           sys_exit(1); /* If you can't switch back for some reason, then epic fail */
     }
 #endif
+
+#endif //SDL1
 }
 
 /***********************************************************************
@@ -432,7 +510,11 @@ void sys_toggle_fullscreen( void )
 
 static void update_key_modifiers(void)
 {
+#ifdef USE_SDL2
+  SDL_Keymod m;
+#else
   SDLMod m ;
+#endif
   m=SDL_GetModState();
   keymodif=0 ;
   if (KMOD_CTRL  & m) keymodif |= KEY_MODIFIER_CTRL ;
@@ -601,7 +683,13 @@ static void handle_key_up(SDL_KeyboardEvent* e)
 
 void sys_resize( int width, int height, int callfrom )
 {
+#ifdef USE_SDL2
+    if(width < 958) width = 958;      // don't resize below this
+    if(height < 750) height = 750;
 
+    SDL_SetWindowSize(glWindow, width,height);
+    ResizeWindow(width,height);
+#else
     SDL_Surface * screen;
     Uint32 flags;
 
@@ -624,6 +712,7 @@ void sys_resize( int width, int height, int callfrom )
     	   sys_exit(1); /* If you can't switch back for some reason, then epic fail */
     }
     ResizeWindow(width,height);
+#endif //SDL1
 }
 
 /***********************************************************************
@@ -632,10 +721,10 @@ void sys_resize( int width, int height, int callfrom )
 
 static void handle_reshape_event( int width, int height ) 
 {
-	  if(!ignore) {
-     sys_resize( width, height, 0 );
-	  }
-	  ignore = 0;
+    if(!ignore) {
+      sys_resize( width, height, 0 );
+    }
+    ignore = 0;
 }
 
 /***********************************************************************
@@ -680,11 +769,22 @@ static void  process_events( void )
 	       handle_button_event(&(event.button)) ;
 	       check_SDL = 0;
         break ;
+
+#ifdef USE_SDL2	  
+      case SDL_WINDOWEVENT:
+            if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
+                    //printf("Window %d resized to %dx%d\n", event.window.windowID, event.window.data1, event.window.data2);
+                    handle_reshape_event(event.window.data1,event.window.data2);
+            }
+            break;
+#else
       case SDL_VIDEORESIZE:
         handle_reshape_event(event.resize.w,event.resize.h);
+#endif
         break;
+
       default:
-        //	fprintf( stderr,"EVENT: %d\n", (int) event.type ) ;
+        //  fprintf( stderr,"EVENT: %d\n", (int) event.type ) ;
         break;
     }
    }
@@ -708,6 +808,66 @@ int checkkey(void) {
  ***********************************************************************/
 
 sysResolution *sys_list_modes( void ) {
+
+#ifdef USE_SDL2
+int i;
+SDL_DisplayMode current;
+sysResolution * sysmodes = NULL;
+int display_count = SDL_GetNumVideoDisplays();
+int mode_index =0;
+int decrement=0;
+
+
+// Get current display mode of all displays.
+for(i = 0; i < SDL_GetNumVideoDisplays(); ++i){
+
+    int should_be_zero = SDL_GetCurrentDisplayMode(i, &current);
+
+    if(should_be_zero != 0) {
+      // In case of error...
+      printf("Could not get display mode for video display #%d: %s", i, SDL_GetError());
+    } else {
+      // On success, print the current display mode.
+      printf("Display #%d: current display mode is %dx%dpx @ %dhz.\n", i, current.w, current.h, current.refresh_rate);
+    }
+
+  }
+
+for (int display_index = 0; display_index <= display_count; display_index++)
+{
+    printf("Display %i:\n", display_index);
+
+    int modes_count = SDL_GetNumDisplayModes(display_index);
+
+    sysmodes = (sysResolution *) malloc((modes_count+1)*sizeof(sysResolution));
+
+    for (mode_index = 0; mode_index <= modes_count; mode_index++)
+    {
+        SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
+
+        if (SDL_GetDisplayMode(display_index, mode_index, &mode) == 0)
+        {
+
+            //we need only modes of current screenmode depth only
+            if(mode.format == current.format)
+            {
+                printf(" %i bpp\t%i x %i @ %iHz\n", SDL_BITSPERPIXEL(mode.format), mode.w, mode.h, mode.refresh_rate); 
+                sysmodes[mode_index-decrement].w = mode.w;
+                sysmodes[mode_index-decrement].h = mode.h;
+            } else {
+                decrement++;
+            }
+        }
+    }
+
+    sysmodes[mode_index].w=0;  /* terminator */
+    sysmodes[mode_index].h=0;  /* terminator */
+
+    return( sysmodes );
+}
+
+#else
+
     sysResolution * sysmodes;
     SDL_Rect ** modes;
     int i, modenr;
@@ -724,6 +884,8 @@ sysResolution *sys_list_modes( void ) {
     sysmodes[i].h=0;  /* terminator */
 
     return( sysmodes );
+
+#endif //SDL1
 }
 
 /***********************************************************************
@@ -737,14 +899,22 @@ void sys_main_loop(void) {
 
   old_t = SDL_GetTicks();
   while(1) {
-  	 if(options_vsync) {
+     if(options_vsync) {
        process_events();
        DisplayFunc();
+#ifdef USE_SDL2
+       SDL_GL_SwapWindow(glWindow);
+#else
        SDL_GL_SwapBuffers();
+#endif
     } else {
        process_events();
        DisplayFunc();
+#ifdef USE_SDL2
+       SDL_GL_SwapWindow(glWindow);
+#else
        SDL_GL_SwapBuffers();
+#endif
        t = SDL_GetTicks();
        sleeptime = 15-(t-old_t); //wish sleeptime is 15 milliseconds
        old_t = t;
@@ -872,6 +1042,9 @@ int launch_command(const char *command) {
  ***********************************************************************/
 
 int vsync_supported(void) {
+#ifdef USE_SDL2
+    return 0;
+#else	
 //compile without errors, if SDL is < Version 10 at compile time
 #if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 && SDL_PATCHLEVEL > 9
 	   SDL_version v;
@@ -883,4 +1056,5 @@ int vsync_supported(void) {
 #endif
     options_vsync = 0; //if not supported by SDL turn every time off
     return 0;
+#endif //SDL1
 }
