@@ -1770,6 +1770,8 @@ int load_config( char *** confv, int * confc, char ** argv, int argc )
 
 #ifdef __MINGW32__ //HS
     sprintf(filename,"%s\\.foobillardrc",getenv("USERPROFILE"));
+#elif defined (__amigaos4__)
+    sprintf(filename,"%s.foobillardrc","PROGDIR:");
 #else
     sprintf(filename,"%s/.foobillardrc",getenv("HOME"));
 #endif
@@ -1847,6 +1849,8 @@ void save_config(void)
 
 #ifdef __MINGW32__ //HS
     sprintf(filename,"%s\\.foobillardrc",getenv("USERPROFILE"));
+#elif defined (__amigaos4__)
+    sprintf(filename,"%s.foobillardrc","PROGDIR:");
 #else
     sprintf(filename,"%s/.foobillardrc",getenv("HOME"));
 #endif
@@ -2436,6 +2440,9 @@ void init_player_roster(struct PlayerRoster * roster)
     if(getenv("USERNAME"))
         strcpy(roster->player[0].name,getenv("USERNAME"));
         strcpy(player[0].name,getenv("USERNAME"));
+#elif defined (__amigaos4__)
+    strcpy(roster->player[0].name,"AMIGA");
+    strcpy(player[0].name,"AMIGA");
 #else
     if(getenv("USER"))
         strcpy(roster->player[0].name,getenv("USER"));

@@ -98,6 +98,9 @@ void show_history(char * historyfile) {
 #else
 	  char callstring[1024];
 	  get_browser(callstring);
+	  #ifdef __amigaos4__
+	  sprintf(workstring," %s%s/html/%s",callstring,get_data_dir(), historyfile);
+	  #else
 	  sprintf(workstring," %s%s/html/%s",callstring,file_name,historyfile);
 #endif
 	  launch_command(workstring);
@@ -268,6 +271,10 @@ void init_history(void) {
    strcpy(file_name,getenv("USERPROFILE"));
    strcat(file_name,"/Desktop/foobillardplus-data");
    mkdir(file_name); //build directory every time is not a problem
+#elif defined (__amigaos4__)
+   strcpy(file_name,"PROGDIR:");
+   strcat(file_name,"data");
+   mkdir(file_name,0777); //build directory every time is not a problem
 #else
    strcpy(file_name,getenv("HOME"));
    strcat(file_name,"/foobillardplus-data");
