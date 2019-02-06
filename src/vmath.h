@@ -131,10 +131,10 @@ typedef struct PolyPoint VMpolypoint;
 #endif
 
 void initlookup_cossin_table(void);
-inline float fastcos(float n);
-inline float fastsin(float n);
-inline float fastatan2(float y, float x);
-inline float fastatan(float x);
+float fastcos(float n);
+float fastsin(float n);
+float fastatan2(float y, float x);
+float fastatan(float x);
 
 struct Vect  vec_cross ( struct Vect v1, struct Vect v2 );
 VMfloat      vec_mul   ( struct Vect v1, struct Vect v2 );
