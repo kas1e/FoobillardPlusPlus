@@ -177,7 +177,11 @@ int    options_mus_volume = 10;
 GLfloat  options_maxanisotrop = 0.0;   // max. of anistropic filters
 VMfloat  options_value_anisotrop = 0.0;    // the vaule for anisotropic filtering if supported and < maxanisotrop (default 0.0)
 
+#ifdef __amigaos4__
+char   options_browser[20] = "odyssey";  // the variable to hold the standard Browser for the Manual
+#else
 char   options_browser[20] = "firefox";  // the variable to hold the standard Browser for the Manual
+#endif
 
 /* queries for OpenGL extensions */
 int extension_cubemap      = 0;
