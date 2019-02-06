@@ -207,6 +207,12 @@ void init_sound(void)
     fseek(f, 0L, SEEK_SET);
     ball_ball_snd.data = malloc(ball_ball_snd.len);
     fread(&ball_ball_snd.data[0], 1, ball_ball_snd.len,f );
+#ifdef __BIG_ENDIAN__
+    int r;
+    for (r = 0; r < ball_ball_snd.len/2; r++){
+         ball_ball_snd.data[r] = SDL_SwapLE16(ball_ball_snd.data[r]);
+    }
+#endif
     fclose(f);
 
     // Manipulate the ballsounds a little bit (for better sound)
