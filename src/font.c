@@ -31,7 +31,9 @@
 #include <stdlib.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#ifndef __amigaos4__
 #include <regex.h>
+#endif
 
 #include "vmath.h"
 #ifdef _MSC_VER
