@@ -765,7 +765,7 @@ static char data_dir[512];
 void enter_data_dir() {
     int success = 1;
 
-#ifdef POSIX
+#if defined POSIX && !defined(__amigaos4__)
     char proc_exe[20];
     char *slash_pos;
 #endif
@@ -773,7 +773,7 @@ void enter_data_dir() {
     do {
         success = 0;
 
-#ifdef POSIX
+#if defined POSIX && !defined(__amigaos4__)
         snprintf(proc_exe, sizeof(proc_exe), "/proc/%d/exe", getpid());
         if (readlink(proc_exe, data_dir, sizeof(data_dir)) < 0) {
             perror("readlink failed");
@@ -834,7 +834,7 @@ const char *get_data_dir() {
  ***********************************************************************/
 
 int file_exists(const char *path) {
-#ifdef POSIX
+#if defined POSIX && !defined(__amigaos4__)
     struct stat buf;
     return stat(path, &buf) == 0;
 #else
