@@ -102,6 +102,7 @@ void show_history(char * historyfile) {
 	  sprintf(workstring," %s%s/html/%s",callstring,get_data_dir(), historyfile);
 	  #else
 	  sprintf(workstring," %s%s/html/%s",callstring,file_name,historyfile);
+	  #endif
 #endif
 	  launch_command(workstring);
 
