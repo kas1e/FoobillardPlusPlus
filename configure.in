@@ -18,10 +18,29 @@ AC_PROG_INSTALL
 dnl Checks for libraries.
 
 AC_CHECK_LIB(png,png_read_image)
-AC_CHECK_LIB(SDL,SDL_Init)
-AC_CHECK_LIB(SDL,SDL_LockAudio)
-AC_CHECK_LIB(SDL_net,SDLNet_Init)
-AC_CHECK_LIB(SDL_mixer,Mix_OpenAudio)
+
+### SDL2 ###
+AC_ARG_ENABLE([sdl2],
+              [AS_HELP_STRING([--enable-sdl2],[enable the compiling for SDL2[no]])],
+              [enable_sdl2=$enableval],
+              [enable_sdl2=no])
+if test x"$enable_sdl2" = "xyes"; then
+  AC_CHECK_LIB(SDL2,SDL_Init)
+  AC_CHECK_LIB(SDL2,SDL_LockAudio)
+  AC_CHECK_LIB(SDL2_net,SDLNet_Init)
+  AC_CHECK_LIB(SDL2_mixer,Mix_OpenAudio)  
+
+### SDL1 ###
+else
+  AC_CHECK_LIB(SDL,SDL_Init)
+  AC_CHECK_LIB(SDL,SDL_LockAudio)
+  AC_CHECK_LIB(SDL_net,SDLNet_Init)
+  AC_CHECK_LIB(SDL_mixer,Mix_OpenAudio)
+
+fi
+# end sdl2/sdl1 check
+
+
 
 ### TODO ### win32
 AC_ARG_ENABLE([win],
@@ -322,6 +341,23 @@ AC_ARG_ENABLE(sound,
               ],
               [export USE_SOUND=yes])
 
+### want compiling with SDL2 instead of SDL1, default = no
+AC_ARG_ENABLE(sdl2,
+              [  --enable-sdl2[=ARG]    enable sdl2 [default=no] ],
+              [ if   test "x$enableval" = "xyes" ; then
+                   export USE_SDL2=yes
+                elif 	test "x$enableval" = "xon" ; then
+                   export USE_SDL2=yes
+                elif 	test "x$enableval" = "xoff" ; then
+                   export USE_SDL2=no
+                elif 	test "x$enableval" = "xno" ; then
+                   export USE_SDL2=no
+                else
+                   export USE_SDL2=yes
+                fi
+              ],
+              [export USE_SDL2=no])
+
 AM_CONDITIONAL(USE_MATHSINGLE, test "x$USE_MATHSINGLE" = "xyes")
 
 AM_CONDITIONAL(USE_NETWORK, test "x$USE_NETWORK" = "xyes")
@@ -333,6 +369,8 @@ AM_CONDITIONAL(USE_WETAB, test "x$USE_WETAB" = "xyes")
 AM_CONDITIONAL(USE_NVIDIA, test "x$USE_NVIDIA" = "xyes")
 
 AM_CONDITIONAL(USE_SOUND, test "x$USE_SOUND" = "xyes")
+
+AM_CONDITIONAL(USE_SDL2, test "x$USE_SDL2" = "xyes")
 
 AM_CONDITIONAL(USE_WIN, test "x$USE_WIN" = "xyes")
 
@@ -365,6 +403,7 @@ General configuration ================================================
     Network compiling:        ${USE_NETWORK}
     use sse                   ${USE_SSE}
     fast math routines        ${FAST_MATH}
+    SDL2 build                ${USE_SDL2}
 
 Now run make ...
 ])

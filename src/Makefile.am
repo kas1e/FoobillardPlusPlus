@@ -119,8 +119,13 @@ foobillardplus_SOURCES = \
    history.c
 endif
 
+if USE_SDL2
+SDL_CFLAGS = `sdl2-config --cflags` -DUSE_SDL2
+SDL_LIBS   = `sdl2-config --libs`
+else
 SDL_CFLAGS = `sdl-config --cflags`
 SDL_LIBS   = `sdl-config --libs`
+endif
 
 FREETYPE_CFLAGS = `freetype-config --cflags`
 FREETYPE_LIBS   = `freetype-config --libs`
@@ -139,7 +144,11 @@ USESSE_CFLAGS =
 endif
 
 if USE_NETWORK
+if USE_SDL2
+NET_LIB = -lSDL2_net
+else
 NET_LIB = -lSDL_net
+endif
 NET_CFLAGS = -DNETWORKING
 else
 NET_LIB =
@@ -166,7 +175,11 @@ NVIDIA_CFLAGS = -DNO_NV_BUMPREF -DNO_NV_FRESNEL
 endif
 
 if USE_SOUND
+if USE_SDL2
+SOUND_MIXER = -lSDL2_mixer
+else
 SOUND_MIXER = -lSDL_mixer
+endif
 SOUND_CFLAGS = -DUSE_SOUND
 else
 SOUND_MIXER =
