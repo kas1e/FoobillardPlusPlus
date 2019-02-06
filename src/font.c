@@ -269,6 +269,7 @@ void getStringPixmapFT(char *str, char *fontname, int font_height, char ** data,
     FT_ULong      realindex, newindex, n;
 
     w1=0; h1=0;
+    int left_most = 0;
     //.. initialise library ..
     if(init_me){
         error = FT_Init_FreeType( &library );
@@ -302,6 +303,7 @@ void getStringPixmapFT(char *str, char *fontname, int font_height, char ** data,
     h=font_height;
     for(i=0;i<2;i++){
         if (i==1){
+            w -= left_most;
             for(w1=w,w=8;w<w1;w*=2);
             for(h1=h,h=8;h<h1;h*=2);
 //            fprintf(stderr,"getStringPixmapFT: allocing  w=%d h=%d\n",w,h);
@@ -327,15 +329,24 @@ void getStringPixmapFT(char *str, char *fontname, int font_height, char ** data,
             // convert to an anti-aliased bitmap
             error = FT_Render_Glyph( face->glyph, FT_RENDER_MODE_NORMAL );
             if (error) { fprintf(stderr,"FT_Render_Glyph:error#%X\n",error); sys_exit(1); }
-             
+
+            int blitx = pen_x + face->glyph->bitmap_left; 
+            int blity = pen_y + font_height*face->ascender/(face->ascender-face->descender) - face->glyph->bitmap_top; 
+            int blitw = face->glyph->bitmap.width; 
+            int blith = face->glyph->bitmap.rows; 
+
+            if (blitx < left_most) left_most = blitx; 
+
             if(i!=0){
                 // now, draw to our target surface
-                my_draw_bitmap( (char *)face->glyph->bitmap.buffer,
+                // comment out old drawing call 
+                /*my_draw_bitmap( (char *)face->glyph->bitmap.buffer,
                                 face->glyph->bitmap.width, face->glyph->bitmap.rows,
 //                                pen_x, pen_y,
                                 pen_x + face->glyph->bitmap_left,
                                 pen_y + font_height*face->ascender/(face->ascender-face->descender) - face->glyph->bitmap_top,
-                                *data , w);
+                                *data , w);*/
+                my_draw_bitmap( (char *)face->glyph->bitmap.buffer, blitw, blith, blitx - left_most, blity, *data , w);
                 pen_x += (face->glyph->advance.x >> 6);
             } else {
 //                fprintf(stderr,"getStringPixmapFT: w=%d h=%d\n",w,h);
