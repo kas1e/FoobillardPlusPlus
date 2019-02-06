@@ -7555,6 +7555,9 @@ static void Init( void )
 /***********************************************************************
  *                               C-Main                                *
  ***********************************************************************/
+#ifdef __amigaos4__
+static const char* __attribute__((used)) stackcookie = "$STACK: 1000000";
+#endif
 
 int main( int argc, char *argv[] )
 {
