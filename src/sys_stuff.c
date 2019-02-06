@@ -47,6 +47,10 @@
 #include "sys_stuff.h"
 #include "billard3d.h"
 
+#ifdef __amigaos4__
+#include <proto/dos.h>
+#endif
+
 /***********************************************************************/
 
 static char browser[256];
@@ -849,6 +853,15 @@ int launch_command(const char *command) {
 #ifdef USE_WIN
 	   ShellExecute(NULL,"open",command,NULL,NULL,SW_SHOWNORMAL);
 	   return (0);
+#elif defined(__amigaos4__)
+       BPTR in = IDOS->DupFileHandle(IDOS->Input()); 
+       BPTR out = IDOS->DupFileHandle(IDOS->Output()); 
+
+       return IDOS->SystemTags(command,
+                 SYS_Asynch,TRUE, 
+                 SYS_Input,in, 
+                 SYS_Output,out, 
+                 TAG_DONE);
 #else
     return system(command);
 #endif
