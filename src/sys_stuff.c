@@ -684,8 +684,8 @@ static void handle_key_up(SDL_KeyboardEvent* e)
 void sys_resize( int width, int height, int callfrom )
 {
 #ifdef USE_SDL2
-    if(width < 958) width = 958;      // don't resize below this
-    if(height < 750) height = 750;
+    if(width < 1024) width = 1024;      // don't resize below this
+    if(height < 720) height = 720;
 
     SDL_SetWindowSize(glWindow, width,height);
     ResizeWindow(width,height);

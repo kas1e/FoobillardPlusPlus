@@ -888,7 +888,7 @@ void init_menu(void)
     */
 
     modes=sys_list_modes();
-    for(mode_num=0;modes[mode_num].w > 957 && modes[mode_num].h > 749;mode_num++) {};
+    for(mode_num=0;modes[mode_num].w > 1023 || modes[mode_num].h > 767;mode_num++) {};
     //fprintf(stderr,"mode_num=%d\n",mode_num);
     menu_num=(mode_num+entr_num-1)/entr_num;
     if (menu_num<1) {
