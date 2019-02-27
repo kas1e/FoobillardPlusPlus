@@ -48,6 +48,8 @@
 #include "billard3d.h"
 
 #ifdef __amigaos4__
+#include <proto/exec.h>
+#include <proto/wb.h>
 #include <proto/dos.h>
 #endif
 
@@ -1025,14 +1027,49 @@ int launch_command(const char *command) {
        ShellExecute(NULL,"open",command,NULL,NULL,SW_SHOWNORMAL);
        return (0);
 #elif defined(__amigaos4__)
-       BPTR in = IDOS->DupFileHandle(IDOS->Input()); 
-       BPTR out = IDOS->DupFileHandle(IDOS->Output()); 
+    struct Library *workbenchbase; 
+    struct WorkbenchIFace *iworkbench; 
+    BPTR path_list = ZERO; 
+    BPTR input_file = ZERO; 
+    BPTR output_file = ZERO; 
+    int32 error = -1; 
 
-       return IDOS->SystemTags(command,
-                 SYS_Asynch,TRUE, 
-                 SYS_Input,in, 
-                 SYS_Output,out, 
-                 TAG_DONE);
+    workbenchbase = IExec->OpenLibrary("workbench.library", 53); 
+    iworkbench = (struct WorkbenchIFace *)IExec->GetInterface(workbenchbase, "main", 1, NULL); 
+
+    if (iworkbench != NULL) { 
+        iworkbench->WorkbenchControl(NULL, 
+            WBCTRLA_DuplicateSearchPath, &path_list, 
+            TAG_END); 
+    } 
+
+    input_file = IDOS->Open("NIL:", MODE_OLDFILE); 
+    output_file = IDOS->Open("NIL:", MODE_OLDFILE); 
+
+    if (input_file && output_file) { 
+        error = IDOS->SystemTags(command, 
+            NP_Name,    "Foobillard++ launch_command", 
+            NP_Path,    path_list, 
+            SYS_Asynch, TRUE, 
+            SYS_Input,  input_file, 
+            SYS_Output, output_file, 
+            SYS_Error,  ZERO, 
+            TAG_END); 
+    } 
+
+    if (error) { 
+        IDOS->Close(input_file); 
+        IDOS->Close(output_file); 
+    } 
+
+    if (error && iworkbench != NULL) { 
+        iworkbench->WorkbenchControl(NULL, 
+            WBCTRLA_FreeSearchPath, path_list, 
+            TAG_END); 
+    } 
+
+    IExec->DropInterface((struct Interface *)iworkbench); 
+    IExec->CloseLibrary(workbenchbase); 
 #else
     return system(command);
 #endif
