@@ -373,7 +373,7 @@ static struct option long_options[] = {
 #endif
 
 // for tron mode
-static MATH_ALIGN16 GLfloat ambient_torus[3] = {0.19, 0.19, 0.19};		// Torus
+static MATH_ALIGN16 GLfloat ambient_torus[3] = {0.19, 0.19, 0.19}; // Torus
 static MATH_ALIGN16 GLfloat diffuse_torus[3] = {0.51, 0.51, 0.51};
 static MATH_ALIGN16 GLfloat specular_torus[3]= {0.51, 0.51, 0.51};
 
@@ -1130,7 +1130,7 @@ Uint32 net_send_timer(Uint32 intervall, void *param) {
  ***********************************************************************/
 
 Uint32 wait_for_connect(Uint32 intervall,void *param) {
-	 // param not used, but a must have for SDL_AddTimer
+  // param not used, but a must have for SDL_AddTimer
   wait_server = 1;
   if(--wait_seconds < 0) { //count the seconds down
     wait_seconds = 0;
@@ -1143,7 +1143,7 @@ Uint32 wait_for_connect(Uint32 intervall,void *param) {
  ***********************************************************************/
 
 Uint32 wait_for_server_connect(Uint32 intervall,void *param) {
-	 // param not used, but a must have for SDL_AddTimer
+  // param not used, but a must have for SDL_AddTimer
   wait_client = 1;
   if(--wait_seconds < 0) { //count the seconds down
     wait_seconds = 0;
@@ -1258,7 +1258,7 @@ static void no_network(void) {
  ***********************************************************************/
 
 Uint32 notshow_disc(Uint32 intervall,void *param) {
-	 // intervall and param not used, but a must have for SDL_AddTimer
+ // intervall and param not used, but a must have for SDL_AddTimer
   show_disc = 0;
   return 0;
 }
@@ -1466,10 +1466,10 @@ void process_option(enum optionType act_option)
        case OPT_SPHEREREF:
          switch(optarg[1]){
              case 'f': /* off */
-             	  options_ball_sphere=0;
+                  options_ball_sphere=0;
                 break;
              case 'n': /* on  */
-             	  options_ball_sphere=1;
+                  options_ball_sphere=1;
                 break;
             }
           break;
@@ -2789,8 +2789,8 @@ int in_cue_ball_region( VMvect pos )
     case GAME_8BALL:
     case GAME_9BALL:
         if( pos.x >  (TABLE_W-BALL_D)/2.0 || pos.x < -(TABLE_W-BALL_D)/2.0
-        	|| pos.y > -TABLE_L/4.0 || pos.y < -(TABLE_L-BALL_D)/2.0) {
-        	return(0);
+            || pos.y > -TABLE_L/4.0 || pos.y < -(TABLE_L-BALL_D)/2.0) {
+            return(0);
         }
         break;
     case GAME_CARAMBOL:
@@ -2798,7 +2798,7 @@ int in_cue_ball_region( VMvect pos )
     case GAME_SNOOKER:
 #define TABLE_SCALE (TABLE_L/(3.571042))
         if( pos.y > -TABLE_L/2.0+TABLE_SCALE*0.737 || vec_abs(vec_diff(pos,vec_xyz(0,-TABLE_L/2.0+TABLE_SCALE*0.737,0))) > TABLE_SCALE*0.292) {
-        	return(0);
+            return(0);
         }
 #undef TABLE_SCALE
         break;
@@ -2812,10 +2812,10 @@ int in_cue_ball_region( VMvect pos )
 
 int in_table_region( VMvect pos )
 {
-	   //fprintf(stderr,"in_table_region\n");
+    //fprintf(stderr,"in_table_region\n");
     if( pos.x >  (TABLE_W-BALL_D)/2.0 || pos.x < -(TABLE_W-BALL_D)/2.0
-    	|| pos.y >  (TABLE_L-BALL_D)/2.0 || pos.y < -(TABLE_L-BALL_D)/2.0) {
-    	return(0);
+        || pos.y >  (TABLE_L-BALL_D)/2.0 || pos.y < -(TABLE_L-BALL_D)/2.0) {
+        return(0);
     }
     return(1);
 }
@@ -2843,15 +2843,15 @@ static void ball_free_place( int ind, BallsType * pballs )
             //fprintf(stderr,"ind=%d, CUE_BALL_IND=%d\n", ind, CUE_BALL_IND);
             if( ( ind==CUE_BALL_IND && in_cue_ball_region(vec_xyz(x,y,0)) && player[act_player].place_cue_ball ) || in_table_region(vec_xyz(x,y,0))) {
             } else {
-            	exitloop=0;
+                exitloop=0;
             }
             //fprintf(stderr,"1:exitloop=%d\n", exitloop);
             for(i=0;i<pballs->nr;i++) if( i!=ind && pballs->ball[i].in_game ){
                 if ( vec_abs(vec_diff(vec_xyz(x,y,0),pballs->ball[i].r)) <
                      (pballs->ball[ind].d+pballs->ball[i].d)/2.0 )
                 {
-                	exitloop=0;
-                	break;
+                    exitloop=0;
+                    break;
                 }
             }
             //fprintf(stderr,"2:exitloop=%d\n", exitloop);
@@ -2940,7 +2940,7 @@ void MouseEvent(MouseButtonEnum button,MouseButtonState state, int x, int y)
 #else
         if ( button==MOUSE_LEFT_BUTTON && state==MOUSE_UP && menu_choose_by_coord(g_act_menu, x-win_width/2, -y+win_height/2 )) {
 #endif
-        	  PLAY_NOISE(cue_sound,options_snd_volume);
+           PLAY_NOISE(cue_sound,options_snd_volume);
            menu_choose(&g_act_menu);
          }
     } else {
@@ -2965,7 +2965,7 @@ void MouseEvent(MouseButtonEnum button,MouseButtonState state, int x, int y)
                  //fprintf(stderr,"x: %i newy: %i winx: %i winy: %i\n",x,newy_int,win_width,win_height);
                  if(x > win_width-60 && x < win_width-14 && newy_int > win_height-53 && newy_int < win_height-14) {
                   if(server!=NULL) {
-                  	 PLAY_NOISE(cue_sound,options_snd_volume);
+                    PLAY_NOISE(cue_sound,options_snd_volume);
                     displaystring(localeText[262]);
                     close_listener(); // end network game
                   } else {
@@ -3028,26 +3028,26 @@ void MouseEvent(MouseButtonEnum button,MouseButtonState state, int x, int y)
                            }
                            if(newx_int >202 && newx_int < 584) {
                              if(y > 40 && y < 83) { //obere Reihe
-                          	   if(newx_int < 269) {
-                          	   	displaystring(localeText[431]);
-                          	   } else if (newx_int > 283 && newx_int < 354){
-                           	   	   Key1('6'); //increase sound volume
-                           	   } else if (newx_int > 429 && newx_int < 498) {
-                         	   	     Key1('9'); //Skip music track
-                         	     } else if (newx_int > 514) {
-                         	   	     Key1('8'); //increase music volume
-                         	     }
+                               if(newx_int < 269) {
+                                displaystring(localeText[431]);
+                               } else if (newx_int > 283 && newx_int < 354){
+                                   Key1('6'); //increase sound volume
+                               } else if (newx_int > 429 && newx_int < 498) {
+                                     Key1('9'); //Skip music track
+                               } else if (newx_int > 514) {
+                                     Key1('8'); //increase music volume
+                               }
                              }
                              if(y > 121 && y < 163) { //untere Reihe
-                           	   if(newx_int < 269) {
-                           	   	  Key1('3'); //Sound on/off
-                           	   } else if (newx_int > 283 && newx_int < 354){
-                           	   	  Key1('5'); // decrease sound volume
-                           	   } else if (newx_int > 429 && newx_int < 498) {
-                           	   	  Key1('4'); //Music on/off
-                           	   } else if (newx_int > 514) {
-                           	   	  Key1('7'); //decrease music volume
-                           	   }
+                               if(newx_int < 269) {
+                                  Key1('3'); //Sound on/off
+                               } else if (newx_int > 283 && newx_int < 354){
+                                  Key1('5'); // decrease sound volume
+                               } else if (newx_int > 429 && newx_int < 498) {
+                                  Key1('4'); //Music on/off
+                               } else if (newx_int > 514) {
+                                  Key1('7'); //decrease music volume
+                               }
                              }
                            }
                          break;
@@ -3560,9 +3560,9 @@ void draw_3D_winner_tourn_text(void)
 #ifdef USE_SOUND
     if(!playonce) {
       if(!(player[player[0].winner?0:1].is_AI || player[player[0].winner?0:1].is_net)) {
-      	 PLAY_NOISE(wave_applause,options_snd_volume);
+        PLAY_NOISE(wave_applause,options_snd_volume);
       } else {
-       	PLAY_NOISE(wave_ooh,options_snd_volume);
+        PLAY_NOISE(wave_ooh,options_snd_volume);
       }
       playonce++;
     }
@@ -3615,9 +3615,9 @@ void draw_3D_winner_text(void)
 #ifdef USE_SOUND
     if(!playonce && options_gamemode!=options_gamemode_tournament) {
       if(!(player[player[0].winner?0:1].is_AI || player[player[0].winner?0:1].is_net)) {
-      	 PLAY_NOISE(wave_applause,options_snd_volume);
+        PLAY_NOISE(wave_applause,options_snd_volume);
       } else {
-       	PLAY_NOISE(wave_ooh,options_snd_volume);
+        PLAY_NOISE(wave_ooh,options_snd_volume);
       }
       playonce++;
     }
@@ -4041,8 +4041,8 @@ void DisplayFunc( void )
              if(options_gamemode==options_gamemode_tournament && player[0].is_AI && player[1].is_AI) {
                //nosound
              } else {
-             	 //fprintf(stderr,"%i\n",(int)(options_snd_volume*((bhitstrength>1)?1:bhitstrength*3)));
-             	 PLAY_NOISE(ball_sound,(int)(options_snd_volume*((bhitstrength>1)?1:bhitstrength*3)));
+               //fprintf(stderr,"%i\n",(int)(options_snd_volume*((bhitstrength>1)?1:bhitstrength*3)));
+               PLAY_NOISE(ball_sound,(int)(options_snd_volume*((bhitstrength>1)?1:bhitstrength*3)));
              }
            }
          } while(bhitstrength!=0.0);
@@ -4054,8 +4054,8 @@ void DisplayFunc( void )
              if(options_gamemode==options_gamemode_tournament && player[0].is_AI && player[1].is_AI) {
               //nosound
              } else {
-             	//fprintf(stderr,"%i\n",(int)(options_snd_volume*((whitstrength>1)?1:whitstrength)));
-             	PLAY_NOISE(wall_sound,(int)(options_snd_volume*((whitstrength>1)?1:whitstrength)));
+              //fprintf(stderr,"%i\n",(int)(options_snd_volume*((whitstrength>1)?1:whitstrength)));
+              PLAY_NOISE(wall_sound,(int)(options_snd_volume*((whitstrength>1)?1:whitstrength)));
              }
            }
          } while(whitstrength!=0.0);
@@ -4123,7 +4123,7 @@ void DisplayFunc( void )
              old_actplayer = act_player; // save the state of the actual player for network game and history function
              evaluate_last_move( player, &act_player, &balls, &queue_view, &Xque );
              if(old_actplayer != act_player) {
-             	  roundcounter++;
+                roundcounter++;
 #ifdef NETWORKING
                 // change the network player
                 if(active_net_timer!=NULL) {
@@ -4392,7 +4392,7 @@ void DisplayFunc( void )
      }
      glCallList(wall4_c_obj);
    } else {
-   	 glRotatef(-90.0,0.0,0.0,1.1);
+     glRotatef(-90.0,0.0,0.0,1.1);
    }
 
    if(options_tronmode) { //switch Tron Gamemode off
@@ -4402,13 +4402,13 @@ void DisplayFunc( void )
 
    // draw some meshes (furniture)
    if(options_furniture) {
-   	 if(!options_tronmode) {
-   	   glCallList(carpet_obj); // first must draw the carpet
+     if(!options_tronmode) {
+       glCallList(carpet_obj); // first must draw the carpet
      } else {
- 			   glMaterialfv(GL_FRONT,GL_AMBIENT, ambient_torus);
- 			   glMaterialfv(GL_FRONT,GL_DIFFUSE, diffuse_torus);
- 			   glMaterialfv(GL_FRONT,GL_SPECULAR, specular_torus);
- 			   glMaterialf (GL_FRONT, GL_SHININESS, 51);
+       glMaterialfv(GL_FRONT,GL_AMBIENT, ambient_torus);
+       glMaterialfv(GL_FRONT,GL_DIFFUSE, diffuse_torus);
+       glMaterialfv(GL_FRONT,GL_SPECULAR, specular_torus);
+       glMaterialf (GL_FRONT, GL_SHININESS, 51);
      }
      glTranslatef(3.5,-4.0,0.65);
      glRotatef(180.0,0.0,0.0,1.0);
@@ -4416,25 +4416,25 @@ void DisplayFunc( void )
      glCullFace(GL_FRONT);  // This is a must for blender export models
      glPolygonMode(GL_BACK,GL_FILL); // fill the back of the polygons
      if(Zrot>180.0) {
-     	 glPushMatrix();
+       glPushMatrix();
        glScalef(0.5,1.0,0.7);
        glCallList(bartable_id); //table window
        glPopMatrix();
      }
-   	 if(options_tronmode) {
+     if(options_tronmode) {
        glDisable(GL_TEXTURE_2D);
-   	 }
+     }
      glTranslatef(2.0,0.0,0.0);
      if(Zrot>180.0) {
        glCallList(sofa_id); //sofa 1
      }
      glTranslatef(2.5,0.0,0.0);
      if(Zrot>180.0) {
-   	   glCallList(sofa_id); //sofa 2
+       glCallList(sofa_id); //sofa 2
      }
      glTranslatef(1.0,0.0,0.0);
      if(Zrot>180.0) {
-     	 glPushMatrix();
+       glPushMatrix();
        glScalef(0.5,1.0,0.7);
        glCallList(bartable_id); //table sofa 2
        glPopMatrix();
@@ -4443,36 +4443,36 @@ void DisplayFunc( void )
      glTranslatef(-6.0,-6.0,0.2);
      glScalef(0.7,0.7,0.7);
      if(Zrot<190.0) {
-   	   glCallList(chair_id); //chair 1
+       glCallList(chair_id); //chair 1
      }
      glRotatef(65.0,0.0,0.0,1.0);
      glTranslatef(1.0,-3.0,0.0);
      if(Zrot<190.0) {
-   	   glCallList(chair_id); //chair 2
+       glCallList(chair_id); //chair 2
      }
      glRotatef(115.0,0.0,0.0,1.0);
      glTranslatef(1.5,0.0,0.2);
      glScalef(1.1,1.1,1.7);
      if(Zrot<190.0) {
-   	   glCallList(bartable_id); //bar table
+       glCallList(bartable_id); //bar table
      }
      glTranslatef(-5.5,0.6,-0.2);
      glScalef(1.0,1.3,1.0);
      if(Zrot<190.0 || Zrot>320.0) {
-    	  if(options_tronmode) {
+       if(options_tronmode) {
         glDisable(GL_TEXTURE_2D);
-    	  }
-   	   glCallList(sofa_id); //sofa 3
+       }
+       glCallList(sofa_id); //sofa 3
      }
      glRotatef(90.0,0.0,0.0,1.0);
      glTranslatef(-4.0,2.4,-0.43);
      glScalef(0.6,0.4,0.45);
 
      if(Zrot<90.0 || Zrot>280.0) {
-    	 if(options_tronmode) {
-    	  glDisable(GL_TEXTURE_2D);
-    	 }
-   	   glCallList(camin_id); //Camin
+      if(options_tronmode) {
+       glDisable(GL_TEXTURE_2D);
+      }
+       glCallList(camin_id); //Camin
      }
      if(!options_birdview_on) {
        glPopMatrix();
@@ -4556,19 +4556,19 @@ void DisplayFunc( void )
    }
 
    if( (player[0].winner || player[1].winner) ) {
-   	   if(!history_free()) { // only one time for update xml-data
-   	   	  history_set();
+       if(!history_free()) { // only one time for update xml-data
+          history_set();
           control_unset(&control__cue_butt_updown);
           control_unset(&control__english);
           control_unset(&control__place_cue_ball);
           control_unset(&control__fov);
           control_unset(&control__mouse_shoot);
           if(options_gamemode==options_gamemode_tournament) {
-          	 if(tournament_state.overall_winner>=0) {
+            if(tournament_state.overall_winner>=0) {
               if(player[0].winner) {
-              	  file_tournament_history(&tournament_state, player[0].name, gametype );
+                 file_tournament_history(&tournament_state, player[0].name, gametype );
               } else {
-              	  file_tournament_history(&tournament_state, player[1].name, gametype );
+                 file_tournament_history(&tournament_state, player[1].name, gametype );
               }
             }
           } else {
@@ -4579,7 +4579,7 @@ void DisplayFunc( void )
              }
 
           }
-   	   }
+       }
        if(options_3D_winnertext){
            if(options_gamemode==options_gamemode_tournament && tournament_state.overall_winner>=0) {
               draw_3D_winner_tourn_text();
@@ -4779,7 +4779,7 @@ void DisplayFunc( void )
        }
        if (gametype==GAME_SNOOKER || gametype==GAME_CARAMBOL){
          glTranslatef(0,30,0);
-    	    textObj_draw_bound( player[act_player?0:1].score_text, HBOUND_RIGHT, VBOUND_BOTTOM );
+         textObj_draw_bound( player[act_player?0:1].score_text, HBOUND_RIGHT, VBOUND_BOTTOM );
        }
        glPopMatrix();
 
@@ -4946,7 +4946,7 @@ void DisplayFunc( void )
        /* strength bar */
        if(!(options_gamemode==options_gamemode_tournament && tournament_state.wait_for_next_match) && !player[act_player].is_AI && !balls_moving) {
        /* disable strength bar if tournament window, player is net or ai is active and no balls where moving */
-    	   myRect2D( -0.5, -0.755, 0.5, -0.675, 0.25, 0.2 );
+           myRect2D( -0.5, -0.755, 0.5, -0.675, 0.25, 0.2 );
            myRect2D( -0.5, -0.745,-0.5+queue_strength, -0.685, 0.0, 0.3 );
            glPushMatrix();
            glTranslatef(-0.5,-0.755, 0.0);
@@ -5041,9 +5041,9 @@ void DisplayFunc( void )
 #endif
        // show the helpline
        if (vline_on && queue_view && !balls_moving ) {
-    	    if(vline_id == -1) {
+           if(vline_id == -1) {
            vline_id = glGenLists(1);
-    	      glNewList(vline_id, GL_COMPILE_AND_EXECUTE);
+           glNewList(vline_id, GL_COMPILE_AND_EXECUTE);
            glPushMatrix();
            glColor3f(0.3,0.3,0.3);
            glLineStipple( 1, 0xF0F0 );
@@ -5055,7 +5055,7 @@ void DisplayFunc( void )
            glDisable(GL_LINE_STIPPLE);
            glPopMatrix();
            glEndList();
-    	   } else {
+           } else {
            //fprintf(stderr,"vline_id %i\n",vline_id);
            glCallList(vline_id);
         }
@@ -5071,7 +5071,7 @@ void DisplayFunc( void )
          if (!FREE_VIEW && control__place_cue_ball) {
            if(cueball_id == -1) {
              cueball_id = glGenLists(1);
-        	    glNewList(cueball_id, GL_COMPILE_AND_EXECUTE);
+             glNewList(cueball_id, GL_COMPILE_AND_EXECUTE);
              glPushMatrix();
              glDisable(GL_BLEND);
              glDisable(GL_TEXTURE_2D);
@@ -5090,7 +5090,7 @@ void DisplayFunc( void )
              glEnable(GL_TEXTURE_2D);
              glEnable(GL_BLEND);
              glEndList();
-      	    } else {
+             } else {
              //fprintf(stderr,"place_cue_ball %i\n",cueball_id);
              glCallList(cueball_id);
            }
@@ -5115,7 +5115,7 @@ void DisplayFunc( void )
                glVertex3f(256,0,0);
              glEnd();
              glEndList();
-    	      } else {
+             } else {
              //fprintf(stderr,"english move %i\n",english_id);
              glCallList(english_id);
            }
@@ -5135,7 +5135,7 @@ void DisplayFunc( void )
              myRect2D_texture();
              glPopMatrix();
              glEndList();
-  	        } else {
+            } else {
            //fprintf(stderr,"english move %i\n",english1_id);
            glCallList(english1_id);
            }
@@ -5151,7 +5151,7 @@ void DisplayFunc( void )
              myRect2D_texture();
              glPopMatrix();
              glEndList();
-	          } else {
+             } else {
              //fprintf(stderr,"mouse shoot %i\n",shoot_id);
              glCallList(shoot_id);
            }
@@ -5167,7 +5167,7 @@ void DisplayFunc( void )
              myRect2D_texture();
              glPopMatrix();
              glEndList();
-	          } else {
+             } else {
              //fprintf(stderr,"cue butt up/down %i\n",cuebutt_id);
              glCallList(cuebutt_id);
            }
@@ -5183,7 +5183,7 @@ void DisplayFunc( void )
              myRect2D_texture();
              glPopMatrix();
              glEndList();
-	          } else {
+             } else {
              //fprintf(stderr,"place cue ball %i\n",cueball1_id);
              glCallList(cueball1_id);
            }
@@ -5199,7 +5199,7 @@ void DisplayFunc( void )
              myRect2D_texture();
              glPopMatrix();
              glEndList();
-	          } else {
+             } else {
              //fprintf(stderr,"FOV %i\n",fov_id);
              glCallList(fov_id);
            }
@@ -5246,9 +5246,9 @@ void DisplayFunc( void )
 #ifdef USE_SOUND
           if(!playonce) {
             if(!(player[player[0].winner?0:1].is_AI || player[player[0].winner?0:1].is_net)) {
-            	 PLAY_NOISE(wave_applause,options_snd_volume);
+              PLAY_NOISE(wave_applause,options_snd_volume);
             } else {
-             	PLAY_NOISE(wave_ooh,options_snd_volume);
+              PLAY_NOISE(wave_ooh,options_snd_volume);
             }
             playonce++;
           }
@@ -5470,7 +5470,7 @@ void restart_game_common(void)
         if(options_gamemode==options_gamemode_tournament && player[0].is_AI && player[1].is_AI) {
           //nosound
         } else {
-         	PLAY_NOISE(wave_shuffle,options_snd_volume);
+          PLAY_NOISE(wave_shuffle,options_snd_volume);
         }
 #endif
     if(gametype==GAME_CARAMBOL) {
@@ -5729,7 +5729,7 @@ void Key( int key, int modifiers ) {
            menu_select_next(g_act_menu);
            break;
        case 13:
-       	   PLAY_NOISE(cue_sound,options_snd_volume);
+           PLAY_NOISE(cue_sound,options_snd_volume);
            menu_choose( &g_act_menu );
            break;
        case 27:
@@ -6033,8 +6033,8 @@ void Key( int key, int modifiers ) {
          break;
       case '0':
           //Make a screenshot
-      	   Snapshot(win_width,win_height);
-      	   displaystring(localeText[429]);
+          Snapshot(win_width,win_height);
+          displaystring(localeText[429]);
          break;
       case '1':
           //zooming in
@@ -6047,68 +6047,68 @@ void Key( int key, int modifiers ) {
 #ifdef USE_SOUND
       case '3':
           //toggle Sound on off
-      	   if((options_use_sound  = (options_use_sound==0)?1:0) == 1) {
-      	   	displaystring(localeText[423]);
+          if((options_use_sound  = (options_use_sound==0)?1:0) == 1) {
+           displaystring(localeText[423]);
           } else {
-          	displaystring(localeText[424]);
+           displaystring(localeText[424]);
           }
          break;
       case '4':
           //toggle Music on off
-      	   if (options_use_music == 1) {
-       	   	displaystring(localeText[426]);
-      	   	 options_use_music = 0;
-      	     if(Mix_PlayingMusic()) {
-      	     	Mix_PauseMusic();
-      	     }
-      	   } else {
-      	   	 options_use_music = 1;
-       	   	displaystring(localeText[425]);
-      	     if(Mix_PausedMusic()) {
-      	     	Mix_ResumeMusic();
-      	     } else {
-      	     	PlayNextSong();
-      	     }
-      	   }
+          if (options_use_music == 1) {
+            displaystring(localeText[426]);
+            options_use_music = 0;
+            if(Mix_PlayingMusic()) {
+             Mix_PauseMusic();
+            }
+          } else {
+            options_use_music = 1;
+            displaystring(localeText[425]);
+            if(Mix_PausedMusic()) {
+             Mix_ResumeMusic();
+            } else {
+             PlayNextSong();
+            }
+          }
          break;
       case '5':
           //Sound-Volume minus
-      	   if(--options_snd_volume <0) {
-      	   	options_snd_volume = 0;
-      	   }
-      	   sprintf(st_string,localeText[428],options_snd_volume);
-      	   displaystring(st_string);
+          if(--options_snd_volume <0) {
+           options_snd_volume = 0;
+          }
+          sprintf(st_string,localeText[428],options_snd_volume);
+          displaystring(st_string);
          break;
       case '6':
           //Sound-Volume plus
-      	   if(++options_snd_volume >MIX_MAX_VOLUME) {
-      	   	options_snd_volume = MIX_MAX_VOLUME;
-      	   }
-      	   sprintf(st_string,localeText[428],options_snd_volume);
-      	   displaystring(st_string);
+          if(++options_snd_volume >MIX_MAX_VOLUME) {
+           options_snd_volume = MIX_MAX_VOLUME;
+          }
+          sprintf(st_string,localeText[428],options_snd_volume);
+          displaystring(st_string);
          break;
       case '7':
           //Music-Volume minus
-      	   if(--options_mus_volume <0) {
-      	    	options_mus_volume = 0;
-      	   }
-      	   Mix_VolumeMusic(options_mus_volume);
-      	   sprintf(st_string,localeText[427],options_mus_volume);
-      	   displaystring(st_string);
+          if(--options_mus_volume <0) {
+            options_mus_volume = 0;
+          }
+          Mix_VolumeMusic(options_mus_volume);
+          sprintf(st_string,localeText[427],options_mus_volume);
+          displaystring(st_string);
          break;
       case '8':
           //Music-Volume plus
-      	   if(++options_mus_volume >MIX_MAX_VOLUME) {
-      	   	 options_mus_volume = MIX_MAX_VOLUME;
-      	   }
-      	   Mix_VolumeMusic(options_mus_volume);
-      	   sprintf(st_string,localeText[427],options_mus_volume);
-      	   displaystring(st_string);
+          if(++options_mus_volume >MIX_MAX_VOLUME) {
+            options_mus_volume = MIX_MAX_VOLUME;
+          }
+          Mix_VolumeMusic(options_mus_volume);
+          sprintf(st_string,localeText[427],options_mus_volume);
+          displaystring(st_string);
          break;
       case '9':
           //Skip Music
-      	   SkipSong();
-      	   displaystring(localeText[430]);
+          SkipSong();
+          displaystring(localeText[430]);
          break;
 #endif
       case ' ':
@@ -6727,7 +6727,7 @@ void menu_cb( int id, void * arg , VMfloat value)
 #ifndef WETAB
         if(options_fsaa) {
          glEnable(GL_MULTISAMPLE_ARB);
-        	options_fsaa_value = 8; //this value is set correct with the options_maxfsaa
+         options_fsaa_value = 8; //this value is set correct with the options_maxfsaa
         }
 #endif
         break;
@@ -6772,18 +6772,18 @@ void menu_cb( int id, void * arg , VMfloat value)
         options_use_sound = 0;
         break;
     case MENU_ID_MUSIC_ON:
- 	   	  options_use_music = 1;
- 	      if(Mix_PausedMusic()) {
- 	     	  Mix_ResumeMusic();
- 	      } else {
- 	     	  PlayNextSong();
- 	      }
+        options_use_music = 1;
+        if(Mix_PausedMusic()) {
+          Mix_ResumeMusic();
+        } else {
+          PlayNextSong();
+        }
         break;
     case MENU_ID_MUSIC_OFF:
- 	   	  options_use_music = 0;
- 	      if(Mix_PlayingMusic()) {
- 	     	  Mix_PauseMusic();
- 	      }
+        options_use_music = 0;
+        if(Mix_PlayingMusic()) {
+          Mix_PauseMusic();
+        }
         break;
 #endif
     case MENU_ID_BIRDVIEW_AI_ON:
@@ -6825,7 +6825,7 @@ void menu_cb( int id, void * arg , VMfloat value)
         }
         break;
     case MENU_ID_HISTORY:
-    	     if(check_xml("history.xml")) {
+          if(check_xml("history.xml")) {
 #ifndef WETAB
           fullscreen = sys_get_fullscreen();
           if(fullscreen) {
@@ -6847,7 +6847,7 @@ void menu_cb( int id, void * arg , VMfloat value)
 #ifndef WETAB
         }
 #endif
-    	   }
+        }
         break;
     case MENU_ID_TOURN_HISTORY:
         if(check_xml("tournament.xml")) {
@@ -7065,18 +7065,18 @@ void menu_cb( int id, void * arg , VMfloat value)
         break;
 #endif
     case MENU_ID_VSYNC_ON:
-    	   //compile without errors, if SDL is < Version 10 at compile time
+        //compile without errors, if SDL is < Version 10 at compile time
 #if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 && SDL_PATCHLEVEL > 9
         if(vsync_supported()) {
-     	    options_vsync = 1;
+          options_vsync = 1;
           if (SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 1) < 0) { // since SDL v1.2.10
             fprintf(stderr, "SDL_GL_SWAP_CONTROL error: %s\n", SDL_GetError());
           }
         }
 #endif
-    	   break;
+        break;
     case MENU_ID_VSYNC_OFF:
-    	   options_vsync = 0;
+        options_vsync = 0;
 #if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 && SDL_PATCHLEVEL > 9
           if (SDL_GL_SetAttribute(SDL_GL_SWAP_CONTROL, 0) < 0) { // since SDL v1.2.10
             fprintf(stderr, "SDL_GL_SWAP_CONTROL error: %s\n", SDL_GetError());
@@ -7575,13 +7575,13 @@ int main( int argc, char *argv[] )
    net_send_data = net_send_data_hard;
    net_get_data = net_get_data_hard;
 #endif
-#ifdef __MINGW32__	//RB
-	  glActiveTextureARB = 0;
+#ifdef __MINGW32__ //RB
+   glActiveTextureARB = 0;
 #endif
 
 #ifdef FAST_MATH
    /* Initialize fastmath cos sin with lookup table */
-	  initlookup_cossin_table();
+   initlookup_cossin_table();
 #endif
 
    /* initialize hostname with a default address */
@@ -7617,8 +7617,8 @@ int main( int argc, char *argv[] )
    sys_create_display(win_width, win_height);
    /* initialize random seed */
    srand(SDL_GetTicks());
-#ifdef __MINGW32__	//RB
-	  glActiveTextureARB = (void *) SDL_GL_GetProcAddress("glActiveTextureARB");
+#ifdef __MINGW32__ //RB
+   glActiveTextureARB = (void *) SDL_GL_GetProcAddress("glActiveTextureARB");
 #endif
 #ifndef WETAB
    if( fullscreen ) sys_fullscreen( 1 );

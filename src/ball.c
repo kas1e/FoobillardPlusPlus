@@ -39,7 +39,7 @@
 #include "png_loader.h"
 
 #ifdef __MINGW32__
-	extern void ( APIENTRY * glActiveTextureARB)( GLenum );
+extern void ( APIENTRY * glActiveTextureARB)( GLenum );
 #endif
 
 static char * balltexdata[22];
@@ -94,8 +94,8 @@ static int in_array( ElemArray * array, GLfloat * v, GLfloat tex_x, GLfloat tex_
 {
     int i,j,k;
     for(i=0;i<array->vnr;i++){
-    	j=i*3;
-    	k=i*2;
+     j=i*3;
+     k=i*2;
         if( fabs(v[0]-array->vert[j])<1.0E-6 &&
             fabs(v[1]-array->vert[j+1])<1.0E-6 &&
             fabs(v[2]-array->vert[j+2])<1.0E-6 &&
@@ -105,7 +105,7 @@ static int in_array( ElemArray * array, GLfloat * v, GLfloat tex_x, GLfloat tex_
         }
     }
     for(i=0;i<array->vnr;i++){
-    	j=i*3;
+     j=i*3;
         if( fabs(v[0]-array->vert[j])<1.0E-6 &&
             fabs(v[1]-array->vert[j+1])<1.0E-6 &&
             fabs(v[2]-array->vert[j+2])<1.0E-6 ){
@@ -129,7 +129,7 @@ void createvertex( GLfloat * v, GLfloat * n, GLfloat tex_x, GLfloat tex_y, ElemA
         glVertex3fv(v);
     } else {
         if(array->indnr==0) {
-        	count=0;
+         count=0;
         }
         pos = in_array( array,v, tex_x, tex_y );
         if( pos>-1 ){
@@ -137,8 +137,8 @@ void createvertex( GLfloat * v, GLfloat * n, GLfloat tex_x, GLfloat tex_y, ElemA
             array->indnr++;
         } else {
             //fprintf(stderr,"creating vertex\n");
-        	i=array->vnr*3;
-        	k=array->vnr*2;
+         i=array->vnr*3;
+         k=array->vnr*2;
             array->vert[i]=v[0];
             array->vert[i+1]=v[1];
             array->vert[i+2]=v[2];
@@ -426,9 +426,9 @@ void draw_ball( BallType * ball, myvec cam_pos, GLfloat cam_FOV, int win_width)
     //original: detail=maxdetail-1.0*log(vec_abs(vec_diff(cam_pos,ball->r))/cnear)/log(2.0);
 
     if( detail>maxdetail ) {
-    	detail=maxdetail;
+     detail=maxdetail;
     } else if( detail<0 ) {
-    	detail=0;
+     detail=0;
     }
 
     if(options_glassballs) {
@@ -900,8 +900,8 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
         create_png_texbind("sphere_ball.png", &sphere_ballbind, 3, GL_RGB);
         create_texbinds(&balls);
 
- 	    cuberef_id = glGenLists(1);
- 	    glNewList(cuberef_id, GL_COMPILE);
+        cuberef_id = glGenLists(1);
+        glNewList(cuberef_id, GL_COMPILE);
         glDisable(GL_TEXTURE_GEN_S);
         glDisable(GL_TEXTURE_GEN_T);
         glDisable(GL_TEXTURE_GEN_R);
@@ -913,8 +913,8 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
         glEnable(GL_TEXTURE_2D);
         glEndList();
 
- 	    light_id = glGenLists(1);
- 	    glNewList(light_id, GL_COMPILE);
+        light_id = glGenLists(1);
+        glNewList(light_id, GL_COMPILE);
         glBegin(GL_QUADS);
         glNormal3s( 0,0,1 );
         glTexCoord2s(0,1);
@@ -929,9 +929,9 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
         glPopMatrix();
         glEndList();
 
- 	    shadow_id = glGenLists(1);
- 	    glNewList(shadow_id, GL_COMPILE);
- 	    glMaterialfv(GL_FRONT, GL_AMBIENT,   col_amb );
+        shadow_id = glGenLists(1);
+        glNewList(shadow_id, GL_COMPILE);
+        glMaterialfv(GL_FRONT, GL_AMBIENT,   col_amb );
         glMaterialfv(GL_FRONT, GL_SPECULAR,  col_spec);
         glMaterialf (GL_FRONT, GL_SHININESS, 0.0     );
         glDisable(GL_TEXTURE_GEN_S);
@@ -943,8 +943,8 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
         glBindTexture(GL_TEXTURE_2D,shadowtexbind);
         glEndList();
 
- 	    cuberef1_id = glGenLists(1);
- 	    glNewList(cuberef1_id, GL_COMPILE);
+        cuberef1_id = glGenLists(1);
+        glNewList(cuberef1_id, GL_COMPILE);
         glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
         glEnable(GL_TEXTURE_GEN_R);
@@ -953,16 +953,16 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
         glTexGeni(GL_R, GL_TEXTURE_GEN_MODE, GL_REFLECTION_MAP_ARB);
         glEndList();
 
- 	    blended_id = glGenLists(1);
- 	    glNewList(blended_id, GL_COMPILE);
- 	    glDepthMask (GL_FALSE);
+        blended_id = glGenLists(1);
+        glNewList(blended_id, GL_COMPILE);
+        glDepthMask (GL_FALSE);
         glEnable(GL_BLEND);
         glPolygonOffset( 0.0, -2.0 );
         glEnable( GL_POLYGON_OFFSET_FILL );
         glEndList();
 
- 	    drawball1_id = glGenLists(1);
- 	    glNewList(drawball1_id, GL_COMPILE);
+        drawball1_id = glGenLists(1);
+        glNewList(drawball1_id, GL_COMPILE);
         glMaterialfv(GL_FRONT, GL_DIFFUSE,   col_diff3);
         glMaterialfv(GL_FRONT, GL_AMBIENT,   col_amb3 );
         glMaterialfv(GL_FRONT, GL_SPECULAR,  col_spec );
@@ -972,8 +972,8 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
         glDisable(GL_TEXTURE_GEN_T);
         glEndList();
 
- 	    drawball2_id = glGenLists(1);
- 	    glNewList(drawball2_id, GL_COMPILE);
+        drawball2_id = glGenLists(1);
+        glNewList(drawball2_id, GL_COMPILE);
         glMaterialfv(GL_FRONT, GL_DIFFUSE,   col_diff);
         glMaterialfv(GL_FRONT, GL_AMBIENT,   col_amb );
         glMaterialfv(GL_FRONT, GL_SPECULAR,  col_spec);
@@ -983,23 +983,23 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
         glDisable(GL_TEXTURE_GEN_T);
         glEndList();
 
- 	    sphere1_id = glGenLists(1);
- 	    glNewList(sphere1_id, GL_COMPILE);
- 	      glBindTexture(GL_TEXTURE_2D,spheretexbind);
+        sphere1_id = glGenLists(1);
+        glNewList(sphere1_id, GL_COMPILE);
+        glBindTexture(GL_TEXTURE_2D,spheretexbind);
         glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
         glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
         glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
         glEndList();
 
-      sphere2_id = glGenLists(1);
-   	  glNewList(sphere2_id, GL_COMPILE);
-   	    glBindTexture(GL_TEXTURE_2D,sphere_ballbind);
+        sphere2_id = glGenLists(1);
+        glNewList(sphere2_id, GL_COMPILE);
+        glBindTexture(GL_TEXTURE_2D,sphere_ballbind);
         glEnable(GL_TEXTURE_GEN_S);
         glEnable(GL_TEXTURE_GEN_T);
         glTexGeni(GL_S, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
         glTexGeni(GL_T, GL_TEXTURE_GEN_MODE, GL_SPHERE_MAP);
-      glEndList();
+        glEndList();
 
         init=1;
     }
@@ -1086,14 +1086,14 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
             glLoadMatrixf(texmat);
             glMatrixMode(GL_MODELVIEW);
         } else {
-        	   if(options_ball_sphere) {
+            if(options_ball_sphere) {
                glCallList(sphere1_id);
-        	   } else {
-        	   	  glCallList(sphere2_id);
-        	   }
+            } else {
+               glCallList(sphere2_id);
+            }
         }
         for(i=0;i<balls.nr;i++) {
-        	if(balls.ball[i].in_game && balls.ball[i].in_fov) {
+         if(balls.ball[i].in_game && balls.ball[i].in_fov) {
             if( options_cuberef && cuberef_binds!=0 ){
                 glBindTexture(GL_TEXTURE_CUBE_MAP_ARB, cuberef_binds[i]);
             }
@@ -1101,8 +1101,8 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
          }
         }
         if( options_cuberef && cuberef_binds!=0 ){
-   	        //fprintf(stderr,"cuberef_id %i\n",cuberef_id);
-   	        glCallList(cuberef_id);
+            //fprintf(stderr,"cuberef_id %i\n",cuberef_id);
+            glCallList(cuberef_id);
         } else {
             glDisable(GL_TEXTURE_GEN_S);
             glDisable(GL_TEXTURE_GEN_T);
@@ -1122,7 +1122,7 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
         fact=1.0+vec_abs(v)*SH_FACT;
         col_shad[0]=0.5-0.3*vec_abs(v);
         if(col_shad[0]<0.0) {
-        	col_shad[0]=0.0;
+         col_shad[0]=0.0;
         }
         col_shad[1]=col_shad[0];
         col_shad[2]=col_shad[0];
@@ -1167,8 +1167,8 @@ void draw_balls( BallsType balls, myvec cam_pos, GLfloat cam_FOV, int win_width,
 
 void draw_ballpath( BallType * pball)
 {
-	int i;
-	i = pball->nr;
+ int i;
+ i = pball->nr;
     glColor3f((VMfloat)(((options_col_ball[i])>>16) & 0xFF)/255.0,
               (VMfloat)(((options_col_ball[i])>> 8) & 0xFF)/255.0,
               (VMfloat)(((options_col_ball[i])>> 0) & 0xFF)/255.0);

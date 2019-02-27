@@ -95,13 +95,13 @@ int filecopy(char *filefrom,char *fileto)
 
   /* open source file */
   if((from = fopen(filefrom, "rb"))==NULL) {
-  	 fprintf(stderr,"Error: open source file (%s) for copy\n",filefrom);
+    fprintf(stderr,"Error: open source file (%s) for copy\n",filefrom);
     return(0);
   }
 
   /* open destination file */
   if((to = fopen(fileto, "wb"))==NULL) {
-  	 fprintf(stderr,"Error: open destination file (%s) for copy\n",fileto);
+    fprintf(stderr,"Error: open destination file (%s) for copy\n",fileto);
     return(0);
   }
 
@@ -236,7 +236,7 @@ void sys_create_display(int width,int height)
   } else if (fullscreen == 0) { 
         glWindow = SDL_CreateWindow("Foobillard++", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
   };
-  
+
   glContext = SDL_GL_CreateContext(glWindow);
   SDL_GL_MakeCurrent(glWindow, glContext); 
   
@@ -373,7 +373,7 @@ void sys_create_display(int width,int height)
 
 #ifndef WETAB
   if(options_fsaa_value > options_maxfsaa) {
-  	options_fsaa_value = options_maxfsaa;
+    options_fsaa_value = options_maxfsaa;
   }
   while (vid_surface == NULL) {
 #endif
@@ -704,12 +704,12 @@ void sys_resize( int width, int height, int callfrom )
     //fprintf(stderr,"Called x: %i y: %i\n",width,height);
     SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
     if(screen == NULL) {
-    	   screen = SDL_SetVideoMode(0, 0, 0, flags); /* If failed, then switch back */
+       screen = SDL_SetVideoMode(0, 0, 0, flags); /* If failed, then switch back */
     }
     SDL_EnableKeyRepeat( SDL_DEFAULT_REPEAT_DELAY, SDL_DEFAULT_REPEAT_INTERVAL );
     if(screen == NULL) {
-    	   fprintf(stderr,"Video-Error on window resize. Terminating\n");
-    	   sys_exit(1); /* If you can't switch back for some reason, then epic fail */
+       fprintf(stderr,"Video-Error on window resize. Terminating\n");
+       sys_exit(1); /* If you can't switch back for some reason, then epic fail */
     }
     ResizeWindow(width,height);
 #endif //SDL1
@@ -752,25 +752,25 @@ static void  process_events( void )
     switch( event.type ) {
       case SDL_KEYUP:
         handle_key_up( &event.key );
-	       break;
+           break;
       case SDL_KEYDOWN:
         /* Handle key presses. */
         handle_key_down( &event.key );
-	       break;
+           break;
       case SDL_QUIT:
-	       /* Handle quit requests (like Ctrl-c). */
-	       sys_exit(0);
-	       break;
+           /* Handle quit requests (like Ctrl-c). */
+           sys_exit(0);
+           break;
       case SDL_MOUSEMOTION:
         handle_motion_event(&(event.motion)) ;
-	       break ;
+           break ;
       case SDL_MOUSEBUTTONDOWN:
       case SDL_MOUSEBUTTONUP:
-	       handle_button_event(&(event.button)) ;
-	       check_SDL = 0;
+           handle_button_event(&(event.button)) ;
+           check_SDL = 0;
         break ;
 
-#ifdef USE_SDL2	  
+#ifdef USE_SDL2
       case SDL_WINDOWEVENT:
             if (event.window.event == SDL_WINDOWEVENT_RESIZED) {
                     //printf("Window %d resized to %dx%d\n", event.window.windowID, event.window.data1, event.window.data2);
@@ -799,7 +799,7 @@ void set_checkkey(void) {
 }
 
 int checkkey(void) {
-	   process_events();
+    process_events();
     return(check_SDL);
 }
 
@@ -810,61 +810,62 @@ int checkkey(void) {
 sysResolution *sys_list_modes( void ) {
 
 #ifdef USE_SDL2
-int i;
-SDL_DisplayMode current;
-sysResolution * sysmodes = NULL;
-int display_count = SDL_GetNumVideoDisplays();
-int mode_index =0;
-int decrement=0;
+    int i;
+    SDL_DisplayMode current;
+    sysResolution * sysmodes = NULL;
+    int display_count = SDL_GetNumVideoDisplays();
+    int mode_index =0;
+    int decrement=0;
 
 
-// Get current display mode of all displays.
-for(i = 0; i < SDL_GetNumVideoDisplays(); ++i){
+    // Get current display mode of all displays.
+    for(i = 0; i < SDL_GetNumVideoDisplays(); ++i){
 
-    int should_be_zero = SDL_GetCurrentDisplayMode(i, &current);
+        int should_be_zero = SDL_GetCurrentDisplayMode(i, &current);
 
-    if(should_be_zero != 0) {
-      // In case of error...
-      printf("Could not get display mode for video display #%d: %s", i, SDL_GetError());
-    } else {
-      // On success, print the current display mode.
-      printf("Display #%d: current display mode is %dx%dpx @ %dhz.\n", i, current.w, current.h, current.refresh_rate);
+        if(should_be_zero != 0) {
+          // In case of error...
+          printf("Could not get display mode for video display #%d: %s", i, SDL_GetError());
+        } else {
+          // On success, print the current display mode.
+          printf("Display #%d: current display mode is %dx%dpx @ %dhz.\n", i, current.w, current.h, current.refresh_rate);
+        }
+
     }
 
-  }
-
-for (int display_index = 0; display_index <= display_count; display_index++)
-{
-    printf("Display %i:\n", display_index);
-
-    int modes_count = SDL_GetNumDisplayModes(display_index);
-
-    sysmodes = (sysResolution *) malloc((modes_count+1)*sizeof(sysResolution));
-
-    for (mode_index = 0; mode_index <= modes_count; mode_index++)
+    for (int display_index = 0; display_index <= display_count; display_index++)
     {
-        SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
+        printf("Display %i:\n", display_index);
 
-        if (SDL_GetDisplayMode(display_index, mode_index, &mode) == 0)
+        int modes_count = SDL_GetNumDisplayModes(display_index);
+
+        sysmodes = (sysResolution *) malloc((modes_count+1)*sizeof(sysResolution));
+
+        for (mode_index = 0; mode_index <= modes_count; mode_index++)
         {
+            SDL_DisplayMode mode = { SDL_PIXELFORMAT_UNKNOWN, 0, 0, 0, 0 };
 
-            //we need only modes of current screenmode depth only
-            if(mode.format == current.format)
+            if (SDL_GetDisplayMode(display_index, mode_index, &mode) == 0)
             {
-                printf(" %i bpp\t%i x %i @ %iHz\n", SDL_BITSPERPIXEL(mode.format), mode.w, mode.h, mode.refresh_rate); 
-                sysmodes[mode_index-decrement].w = mode.w;
-                sysmodes[mode_index-decrement].h = mode.h;
-            } else {
-                decrement++;
+
+                //we need only modes of current screenmode depth only
+                if(mode.format == current.format)
+                {
+                    printf(" %i bpp\t%i x %i @ %iHz\n", SDL_BITSPERPIXEL(mode.format), mode.w, mode.h, mode.refresh_rate); 
+                    sysmodes[mode_index-decrement].w = mode.w;
+                    sysmodes[mode_index-decrement].h = mode.h;
+                } else {
+                    decrement++;
+                }
             }
         }
-    }
 
     sysmodes[mode_index].w=0;  /* terminator */
     sysmodes[mode_index].h=0;  /* terminator */
 
     return( sysmodes );
-}
+
+    }
 
 #else
 
@@ -1021,8 +1022,8 @@ int file_exists(const char *path) {
 
 int launch_command(const char *command) {
 #ifdef USE_WIN
-	   ShellExecute(NULL,"open",command,NULL,NULL,SW_SHOWNORMAL);
-	   return (0);
+       ShellExecute(NULL,"open",command,NULL,NULL,SW_SHOWNORMAL);
+       return (0);
 #elif defined(__amigaos4__)
        BPTR in = IDOS->DupFileHandle(IDOS->Input()); 
        BPTR out = IDOS->DupFileHandle(IDOS->Output()); 
@@ -1044,14 +1045,14 @@ int launch_command(const char *command) {
 int vsync_supported(void) {
 #ifdef USE_SDL2
     return 0;
-#else	
+#else
 //compile without errors, if SDL is < Version 10 at compile time
 #if SDL_MAJOR_VERSION == 1 && SDL_MINOR_VERSION == 2 && SDL_PATCHLEVEL > 9
-	   SDL_version v;
+    SDL_version v;
 
     v = *SDL_Linked_Version();
     if(v.major == 1 && v.minor == 2 && v.patch > 9) {
-    	 return 1;
+         return 1;
     }
 #endif
     options_vsync = 0; //if not supported by SDL turn every time off

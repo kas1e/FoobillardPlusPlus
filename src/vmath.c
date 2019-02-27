@@ -42,7 +42,7 @@ const float M_PI2 = M_PI*2;
 static float fast_cossin_table[MAX_CIRCLE_ANGLE];           // Declare table of fast cosinus and sinus
 
 void initlookup_cossin_table(void) {
-	 long i;
+  long i;
   // Build cossin table
   for (i = 0; i < MAX_CIRCLE_ANGLE ; i++) {
      fast_cossin_table[i] = (float)sin((double)i * M_PI / HALF_MAX_CIRCLE_ANGLE);
@@ -93,18 +93,18 @@ inline float fastatan(float x)
  ***********************************************************************/
 
 inline float fastatan2(float y, float x) {
-	  float coeff_1 = M_PI / 4.0f;
-	  float coeff_2 = 3.0f * coeff_1;
-	  float abs_y = abs(y);
-	  float angle;
-	  if (x > 0.0f) {
-		    float r = (x - abs_y) / (x + abs_y);
-		    angle = coeff_1 - coeff_1 * r;
-	  } else {
-		    float r = (x + abs_y) / (abs_y - x);
-		    angle = coeff_2 - coeff_1 * r;
-	  }
-	return y < 0.0f ? -angle : angle;
+      float coeff_1 = M_PI / 4.0f;
+      float coeff_2 = 3.0f * coeff_1;
+      float abs_y = abs(y);
+      float angle;
+      if (x > 0.0f) {
+            float r = (x - abs_y) / (x + abs_y);
+            angle = coeff_1 - coeff_1 * r;
+      } else {
+            float r = (x + abs_y) / (abs_y - x);
+            angle = coeff_2 - coeff_1 * r;
+      }
+    return y < 0.0f ? -angle : angle;
 }
 
 /***********************************************************************/
@@ -125,9 +125,9 @@ VMfloat vec_mul( struct Vect v1, struct Vect v2 )
 #ifndef USE_SSE
    return( v1.x*v2.x + v1.y*v2.y + v1.z*v2.z );
 #else
-	  static struct Vect vr;
-	  vr.v = _mm_mul_ps(v1.v, v2.v);
-	  return (vr.x+vr.y+vr.z);
+      static struct Vect vr;
+      vr.v = _mm_mul_ps(v1.v, v2.v);
+      return (vr.x+vr.y+vr.z);
 #endif
 
 }
@@ -160,7 +160,7 @@ struct Vect vec_add(struct Vect v1, struct Vect v2 )
 #else
     vr.v = _mm_add_ps(v1.v, v2.v);
 #endif
-	return (vr);
+    return (vr);
 }
 
 /***********************************************************************/
@@ -212,8 +212,8 @@ VMfloat vec_abssq( struct Vect v )
 #ifndef USE_SSE
     return( v.x*v.x + v.y*v.y + v.z*v.z );
 #else
-  	 static struct Vect vr;
-	   vr.v = _mm_mul_ps(v.v, v.v);
+    static struct Vect vr;
+    vr.v = _mm_mul_ps(v.v, v.v);
     return(vr.x + vr.y + vr.z);
 #endif
 }
@@ -237,10 +237,10 @@ struct Vect vec_unit( struct Vect v )
     }
 #else
      static struct Vect vr1;
-   	   vr1.v = _mm_set1_ps(l);
-	      vr.v = _mm_div_ps(v.v,vr1.v);
+    vr1.v = _mm_set1_ps(l);
+    vr.v = _mm_div_ps(v.v,vr1.v);
     } else {
-       vr.v = _mm_setzero_ps ();
+    vr.v = _mm_setzero_ps ();
     }
 #endif
     return vr;
@@ -345,7 +345,7 @@ struct Vect vec_proj( struct Vect v1, struct Vect v2 )
 #else
     static struct Vect vr;
     vr.v = _mm_mul_ps(v2.v, v2.v);
-   	v2ls = vr.x + vr.y + vr.z;
+    v2ls = vr.x + vr.y + vr.z;
 #endif
     if( v2ls > 0.0 ){
         return( vec_scale( v2, vec_mul(v1,v2)/v2ls ) );
@@ -403,7 +403,7 @@ struct Vect tri_center( struct Vect v1, struct Vect v2, struct Vect v3 )
                    (v1.y+v2.y+v3.y)/3.0,
                    (v1.z+v2.z+v3.z)/3.0));
 #else
-	   static struct Vect vr,vr1,vr2;
+    static struct Vect vr,vr1,vr2;
     vr.v = _mm_add_ps(v1.v, v2.v);
     vr1.v = _mm_add_ps(vr.v, v3.v);
     vr2.v = _mm_set_ps1(3.0f);

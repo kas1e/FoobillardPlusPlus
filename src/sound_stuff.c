@@ -101,9 +101,9 @@ int strsound ( char s1[] )
          s[i] = toupper(s[i]);
          ++i;
       }
- 	    if(strcmp(s,".MP3") || strcmp(s,".OGG")) {
+         if(strcmp(s,".MP3") || strcmp(s,".OGG")) {
          return(1);
- 	    }
+         }
    }
    return(0);
 }
@@ -122,14 +122,14 @@ void musicFinished()
  ***********************************************************************/
 
 void SkipSong (void) {
-	   if(options_use_music) {
-	   	 if (!music_to_play || music_finished) {
-	   		  return;
-	   	 }
-	   	 if(Mix_PlayingMusic()) {
-	   	   Mix_FadeOutMusic(2000);
-	   	 }
-	   }
+       if(options_use_music) {
+         if (!music_to_play || music_finished) {
+              return;
+         }
+         if(Mix_PlayingMusic()) {
+           Mix_FadeOutMusic(2000);
+         }
+       }
 }
 
 /***********************************************************************
@@ -137,40 +137,41 @@ void SkipSong (void) {
  ***********************************************************************/
 
 void PlayNextSong (void) {
-	   if(options_use_music) {
-	   	 if (!music_to_play || !music_finished) {
-	   		  return;
-	   	 }
-	   	 if(give_up >= songs) {
-	   	 	 give_up = 0;
-	   	 	 options_use_music = 0;
-	   	 	 fprintf(stderr,"background-music failed too many times. Give up.\n");
-	   	 	 return;
-	   	 }
-	     if(music) {
-	   	   Mix_FreeMusic(music);
-	   	   music = NULL;
-	     }
-	     if(++actualsong >= songs) {
-	   	   actualsong = 0;
-	     }
-	     sprintf(playfile,"music/%s",musicfile[shufflesong[actualsong]]);
-      if(!(music = Mix_LoadMUS(playfile))) {
-         //fprintf(stderr,"background-music %s failed. Goto next one.\n",musicfile[shufflesong[actualsong]]);
-         give_up ++;
-         PlayNextSong();
-      } else {
-      	  fprintf(stderr,"Now playing %s.\n",musicfile[shufflesong[actualsong]]);
-      	  Mix_PlayMusic(music,0);
-         Mix_VolumeMusic(options_mus_volume);
-         give_up = 0;
-         //fprintf(stderr,"music is%s playing.\n", Mix_PlayingMusic()?"":" not");
-         if(Mix_PlayingMusic()) {
-         	 //fprintf(stderr,"Wait for next song\n");
-           music_finished = 0;
+       if(options_use_music) {
+         if (!music_to_play || !music_finished) {
+              return;
          }
-      }
-	   }
+         if(give_up >= songs) {
+             give_up = 0;
+             options_use_music = 0;
+             fprintf(stderr,"background-music failed too many times. Give up.\n");
+             return;
+         }
+         if(music) {
+            Mix_FreeMusic(music);
+            music = NULL;
+         }
+         if(++actualsong >= songs) {
+            actualsong = 0;
+         }
+         sprintf(playfile,"music/%s",musicfile[shufflesong[actualsong]]);
+
+         if(!(music = Mix_LoadMUS(playfile))) {
+            //fprintf(stderr,"background-music %s failed. Goto next one.\n",musicfile[shufflesong[actualsong]]);
+            give_up ++;
+            PlayNextSong();
+         } else {
+             fprintf(stderr,"Now playing %s.\n",musicfile[shufflesong[actualsong]]);
+             Mix_PlayMusic(music,0);
+             Mix_VolumeMusic(options_mus_volume);
+             give_up = 0;
+             //fprintf(stderr,"music is%s playing.\n", Mix_PlayingMusic()?"":" not");
+             if(Mix_PlayingMusic()) {
+              //fprintf(stderr,"Wait for next song\n");
+               music_finished = 0;
+             }
+         }
+       }
 }
 
 /***********************************************************************
@@ -179,10 +180,10 @@ void PlayNextSong (void) {
 
 Mix_Chunk* loadsound (char *filename) {
 
-	   Mix_Chunk *chunkname;
+    Mix_Chunk *chunkname;
     if(!(chunkname = Mix_LoadWAV(filename))) {
- 	    fprintf(stderr,"Initializing %s failed. No sound in game.\n",filename);
- 	    options_use_sound=0;
+        fprintf(stderr,"Initializing %s failed. No sound in game.\n",filename);
+        options_use_sound=0;
     }
     return (chunkname);
 }
@@ -233,99 +234,99 @@ void init_sound(void)
       options_use_sound=0;
       options_use_music=0;
     } else {
-    	 Mix_AllocateChannels(20); // max. 20 Channels
-    	 Mix_Volume(-1,MIX_MAX_VOLUME);
+         Mix_AllocateChannels(20); // max. 20 Channels
+         Mix_Volume(-1,MIX_MAX_VOLUME);
 
-    	 // Extended Init for Version higher then SDL 1.2.10
+         // Extended Init for Version higher then SDL 1.2.10
 #if SDL_MIXER_MAJOR_VERSION > 2 || (SDL_MIXER_MINOR_VERSION == 2 && SDL_MIXER_PATCHLEVEL > 9)
-    	 // load support for the MP3, OGG music formats
-    	 int flags=MIX_INIT_OGG | MIX_INIT_MP3;
-    	 int initted=Mix_Init(flags);
-    	 if((initted&flags) != flags) {
-    	     fprintf(stderr,"Mix_Init: Failed to init both ogg and mp3 support!\nCheck only for ogg.\n");
-    	     fprintf(stderr,"Mix_Init: %s\n", Mix_GetError());
-    	     flags=MIX_INIT_OGG; // check only for ogg
-    	     initted=Mix_Init(flags);
-    	     if((initted&flags) != flags) {
-     	       fprintf(stderr,"Mix_Init: Failed to init required ogg support!\n");
-     	       fprintf(stderr,"Mix_Init: %s\n", Mix_GetError());
-    	        options_use_music=0;
-    	     }
-    	 }
+         // load support for the MP3, OGG music formats
+         int flags=MIX_INIT_OGG | MIX_INIT_MP3;
+         int initted=Mix_Init(flags);
+         if((initted&flags) != flags) {
+             fprintf(stderr,"Mix_Init: Failed to init both ogg and mp3 support!\nCheck only for ogg.\n");
+             fprintf(stderr,"Mix_Init: %s\n", Mix_GetError());
+             flags=MIX_INIT_OGG; // check only for ogg
+             initted=Mix_Init(flags);
+             if((initted&flags) != flags) {
+               fprintf(stderr,"Mix_Init: Failed to init required ogg support!\n");
+               fprintf(stderr,"Mix_Init: %s\n", Mix_GetError());
+               options_use_music=0;
+             }
+         }
 #endif
-   	  /* Actually loads up the sounds */
-    	 ball_hole = loadsound ("ballinhole.wav");
-    	 wave_applause = loadsound ("applause.wav");
-    	 wave_intro = loadsound ("intro.wav");
-    	 wave_shuffle = loadsound ("shuffleballs.wav");
-    	 wave_smack = loadsound ("smack.wav");
-    	 wave_bomb = loadsound ("bomb.wav");
-    	 wave_oneball = loadsound ("oneballontable.wav");
-    	 wave_outball = loadsound ("balloutoftable.wav");
-    	 wave_ooh = loadsound ("ooh.wav");
-    	 if(!(ball_sound = Mix_QuickLoad_RAW((Uint8*)ball_ball_snd.data,ball_ball_snd.len))) {
-    	 	fprintf(stderr,"Initializing internal ball-sound failed. No sound in game\n");
-    	 	options_use_sound=0;
-    	 }
-    	 if(!(wall_sound = Mix_QuickLoad_RAW((Uint8*)ball_wall_snd.data,ball_wall_snd.len))) {
-    	 	fprintf(stderr,"Initializing internal wall-sound failed. No sound in game\n");
-    	 	options_use_sound=0;
-    	 }
-    	 if(!(cue_sound = Mix_QuickLoad_RAW((Uint8*)ball_cue_snd.data,ball_cue_snd.len))) {
-    	 	fprintf(stderr,"Initializing internal cue-sound failed. No sound in game\n");
-    	 	options_use_sound=0;
-    	 }
+         /* Actually loads up the sounds */
+         ball_hole = loadsound ("ballinhole.wav");
+         wave_applause = loadsound ("applause.wav");
+         wave_intro = loadsound ("intro.wav");
+         wave_shuffle = loadsound ("shuffleballs.wav");
+         wave_smack = loadsound ("smack.wav");
+         wave_bomb = loadsound ("bomb.wav");
+         wave_oneball = loadsound ("oneballontable.wav");
+         wave_outball = loadsound ("balloutoftable.wav");
+         wave_ooh = loadsound ("ooh.wav");
+         if(!(ball_sound = Mix_QuickLoad_RAW((Uint8*)ball_ball_snd.data,ball_ball_snd.len))) {
+            fprintf(stderr,"Initializing internal ball-sound failed. No sound in game\n");
+            options_use_sound=0;
+         }
+         if(!(wall_sound = Mix_QuickLoad_RAW((Uint8*)ball_wall_snd.data,ball_wall_snd.len))) {
+            fprintf(stderr,"Initializing internal wall-sound failed. No sound in game\n");
+            options_use_sound=0;
+         }
+         if(!(cue_sound = Mix_QuickLoad_RAW((Uint8*)ball_cue_snd.data,ball_cue_snd.len))) {
+            fprintf(stderr,"Initializing internal cue-sound failed. No sound in game\n");
+            options_use_sound=0;
+         }
 
-   	  /* Actually loads up the music */
+      /* Actually loads up the music */
 #if SDL_MIXER_MAJOR_VERSION > 2 || (SDL_MIXER_MINOR_VERSION == 2 && SDL_MIXER_PATCHLEVEL > 9)
-    	 if((initted&flags) == flags) {
+         if((initted&flags) == flags) {
 #endif
-    	 if((d = opendir("music"))) {
-    	 	 i = 0;
-   	    while ((dp = readdir(d))!= NULL && i <= 500) {
-   	    	 if(strsound(dp->d_name)) {
-   	    	 	  strcpy(musicfile[i++],dp->d_name);
-   		        //fprintf(stderr,"%s\n", musicfile[i-1]);
-   	    	 }
-   	    }
-   	    closedir(d);
-   	    if(i>0) { //music to play
+        if((d = opendir("music"))) {
+             i = 0;
+        while ((dp = readdir(d))!= NULL && i <= 500) {
+             if(strsound(dp->d_name)) {
+                  strcpy(musicfile[i++],dp->d_name);
+                //fprintf(stderr,"%s\n", musicfile[i-1]);
+             }
+        }
+        closedir(d);
+        if(i>0) { //music to play
           if(i == 1) { // only one song, so play forever
-          	sprintf(playfile,"music/%s",musicfile[0]);
-          	if((music = Mix_LoadMUS(playfile))) {
-          		  Mix_FadeInMusic(music,-1,4000);
-          		  Mix_VolumeMusic(options_mus_volume);
-          	}
+            sprintf(playfile,"music/%s",musicfile[0]);
+            if((music = Mix_LoadMUS(playfile))) {
+                  Mix_FadeInMusic(music,-1,4000);
+                  Mix_VolumeMusic(options_mus_volume);
+            }
           } else {
-          	songs = i;
-          	if(i > 499) {
-          		  fprintf(stderr,"Max. 500 Songs are playable. Only the first 500 Songs are considered.\n");
-          		  songs = 500;
-          	}
-          	// shuffle the playing-list
-          	for (i=0;i<songs;i++) {
-          		 shufflesong[i] = i;
-          	}
-          	for (k = 0; k < songs - 1; k++) {
-          	  j = k + rand() / (RAND_MAX / (songs - k) + 1);
-          	  dummy = shufflesong[j];
-          	  shufflesong[j] = shufflesong[k];
-          	  shufflesong[k] = dummy;
-          	}
-          	//for(i=0;i<songs;i++) {	fprintf(stderr,"%i, ",shufflesong[i]);	}
-          	music_to_play = 1;
-           PlayNextSong();
-           Mix_HookMusicFinished(musicFinished);
+            songs = i;
+            if(i > 499) {
+                  fprintf(stderr,"Max. 500 Songs are playable. Only the first 500 Songs are considered.\n");
+                  songs = 500;
+            }
+            // shuffle the playing-list
+            for (i=0;i<songs;i++) {
+                 shufflesong[i] = i;
+            }
+            for (k = 0; k < songs - 1; k++) {
+              j = k + rand() / (RAND_MAX / (songs - k) + 1);
+              dummy = shufflesong[j];
+              shufflesong[j] = shufflesong[k];
+              shufflesong[k] = dummy;
+            }
+            //for(i=0;i<songs;i++) {    fprintf(stderr,"%i, ",shufflesong[i]);  }
+            music_to_play = 1;
+            PlayNextSong();
+            Mix_HookMusicFinished(musicFinished);
           }
-   	    } else {
-   	    	 options_use_music=0;
-   	    }
-    	 } else {
-   	     fprintf(stderr,"Initializing background-music failed. No background-music in game\n");
-   	     options_use_music=0;
-    	 }
+        } else {
+            options_use_music=0;
+        }
+         } else {
+         fprintf(stderr,"Initializing background-music failed. No background-music in game\n");
+         options_use_music=0;
+         }
 #if SDL_MIXER_MAJOR_VERSION > 2 || (SDL_MIXER_MINOR_VERSION == 2 && SDL_MIXER_PATCHLEVEL > 9)
-    	 }
+         }
 #endif
 
     }
@@ -336,13 +337,13 @@ void init_sound(void)
  ***********************************************************************/
 void PlayNoise(Mix_Chunk *chunkdata, int volume)
 {
-	   if(options_use_sound) {
-	   	 if (chunkdata != NULL) {
-	   	   //fprintf(stderr,"Volume: %i\n",volume);
-	       Mix_VolumeChunk(chunkdata, volume);
-	       Mix_PlayChannel(-1, chunkdata, 0);
-	   	 }
-	   }
+       if(options_use_sound) {
+         if (chunkdata != NULL) {
+           //fprintf(stderr,"Volume: %i\n",volume);
+           Mix_VolumeChunk(chunkdata, volume);
+           Mix_PlayChannel(-1, chunkdata, 0);
+         }
+       }
 }
 
 
@@ -354,7 +355,7 @@ void exit_sound(void)
     Mix_CloseAudio();
 /* ### TODO ### really needed, if mixer closes ??
 #if SDL_MIXER_MAJOR_VERSION > 2 || (SDL_MIXER_MINOR_VERSION == 2 && SDL_MIXER_PATCHLEVEL > 9)
-	   Mix_Quit();
+       Mix_Quit();
 #endif
 */
 }

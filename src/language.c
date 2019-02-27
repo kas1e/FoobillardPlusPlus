@@ -150,7 +150,7 @@ int manual_available()
 static char *find_manual_file()
 {
     return find_localized_file(
-    		(arch == ARCH_WETAB) ? "index.html" : "index_a.html");
+        (arch == ARCH_WETAB) ? "index.html" : "index_a.html");
 }
 
 /***********************************************************************

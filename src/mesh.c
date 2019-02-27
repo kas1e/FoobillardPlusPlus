@@ -112,11 +112,11 @@ void MakeSofa()
    if(sofa_id == -1) {
      sofa_id = glGenLists(1);
      glNewList(sofa_id, GL_COMPILE);
-	    glBindTexture(GL_TEXTURE_2D,sofatexbind);
+     glBindTexture(GL_TEXTURE_2D,sofatexbind);
 #ifdef USE_BINDBUFFER
-	    DrawMesh(vbo, vinx, FACES_COUNT);
+     DrawMesh(vbo, vinx, FACES_COUNT);
 #else
-	    DrawMesh(FACES_COUNT, (char *)&vertexs, (char *)&indexes);
+     DrawMesh(FACES_COUNT, (char *)&vertexs, (char *)&indexes);
 #endif
      glEndList();
    }
@@ -129,9 +129,9 @@ void MakeChair()
      glNewList(chair_id, GL_COMPILE);
      glBindTexture(GL_TEXTURE_2D,chairtexbind);
 #ifdef USE_BINDBUFFER
-  	  DrawMesh(vbo1, vinx1, FACES1_COUNT);
+     DrawMesh(vbo1, vinx1, FACES1_COUNT);
 #else
-	    DrawMesh(FACES1_COUNT, (char *)&vertexs1, (char *)indexes1);
+     DrawMesh(FACES1_COUNT, (char *)&vertexs1, (char *)indexes1);
 #endif
      glEndList();
    }
@@ -139,30 +139,30 @@ void MakeChair()
 
 void MakeTable()
 {
-	  static GLfloat ambient_torus[3] = {0.19, 0.19, 0.19};		// Torus
-	  static GLfloat diffuse_torus[3] = {0.51, 0.51, 0.51};
-	  static GLfloat specular_torus[3]= {0.51, 0.51, 0.51};
+   static GLfloat ambient_torus[3] = {0.19, 0.19, 0.19}; // Torus
+   static GLfloat diffuse_torus[3] = {0.51, 0.51, 0.51};
+   static GLfloat specular_torus[3]= {0.51, 0.51, 0.51};
 
    if(bartable_id == -1) {
      bartable_id = glGenLists(1);
      glNewList(bartable_id, GL_COMPILE);
      glDisable(GL_TEXTURE_2D);
-  			glMaterialfv(GL_FRONT,GL_AMBIENT, ambient_torus);
-  			glMaterialfv(GL_FRONT,GL_DIFFUSE, diffuse_torus);
-  			glMaterialfv(GL_FRONT,GL_SPECULAR, specular_torus);
-  			glMaterialf (GL_FRONT, GL_SHININESS, 51);
+        glMaterialfv(GL_FRONT,GL_AMBIENT, ambient_torus);
+        glMaterialfv(GL_FRONT,GL_DIFFUSE, diffuse_torus);
+        glMaterialfv(GL_FRONT,GL_SPECULAR, specular_torus);
+        glMaterialf (GL_FRONT, GL_SHININESS, 51);
 
 #ifdef USE_BINDBUFFER
-	    DrawMesh(vbo2, vinx2, FACES2_COUNT);
+        DrawMesh(vbo2, vinx2, FACES2_COUNT);
 #else
-	    DrawMesh(FACES2_COUNT, (char *)&vertexs2, (char *)&indexes2);
+        DrawMesh(FACES2_COUNT, (char *)&vertexs2, (char *)&indexes2);
 #endif
      glEnable (GL_BLEND);
      glBlendFunc (GL_ONE, GL_ONE_MINUS_SRC_COLOR); // upper glass)
 #ifdef USE_BINDBUFFER
-	    DrawMesh(vbo2a, vinx2a, FACES2a_COUNT);
+     DrawMesh(vbo2a, vinx2a, FACES2a_COUNT);
 #else
-	    DrawMesh(FACES2a_COUNT, (char *)&vertexs2a, (char *)&indexes2a);
+    DrawMesh(FACES2a_COUNT, (char *)&vertexs2a, (char *)&indexes2a);
 #endif
      glDisable (GL_BLEND);
      glEnable(GL_TEXTURE_2D);
@@ -175,11 +175,11 @@ void MakeCamin()
    if(camin_id == -1) {
      camin_id = glGenLists(1);
      glNewList(camin_id, GL_COMPILE);
-	    glBindTexture(GL_TEXTURE_2D,camintexbind);
+     glBindTexture(GL_TEXTURE_2D,camintexbind);
 #ifdef USE_BINDBUFFER
-	    DrawMesh(vbo3, vinx3, FACES3_COUNT);
+     DrawMesh(vbo3, vinx3, FACES3_COUNT);
 #else
-	    DrawMesh(FACES3_COUNT, (char *)&vertexs3, (char *)&indexes3);
+     DrawMesh(FACES3_COUNT, (char *)&vertexs3, (char *)&indexes3);
 #endif
      glEndList();
    }
@@ -187,29 +187,29 @@ void MakeCamin()
 
 void MakeLamp()
 {
-//   static GLfloat ambient_torus[3] = {0.25, 0.25, 0.25};		// Torus
+//   static GLfloat ambient_torus[3] = {0.25, 0.25, 0.25};  // Torus
 //   static GLfloat diffuse_torus[3] = {0.4, 0.4, 0.4};
 //   static GLfloat specular_torus[3]= {0.774597, 0.774597, 0.774597};
-   static GLfloat ambient_torus[3] = {	0.2125, 	0.1275, 	0.054};		// Torus
-   static GLfloat diffuse_torus[3] = {0.714, 0.4284, 	0.18144};
-   static GLfloat specular_torus[3]= {	0.393548, 	0.271906, 0.166721};
-	  if(lamp_id == -1) {
+   static GLfloat ambient_torus[3] = {0.2125,0.1275,0.054};// Torus
+   static GLfloat diffuse_torus[3] = {0.714, 0.4284,0.18144};
+   static GLfloat specular_torus[3]= {0.393548,0.271906,0.166721};
+     if(lamp_id == -1) {
      lamp_id = glGenLists(1);
      glNewList(lamp_id, GL_COMPILE);
-	      glDisable(GL_TEXTURE_2D);
-	      glDepthMask (GL_FALSE);
-	   			glMaterialfv(GL_FRONT,GL_AMBIENT, ambient_torus);
-	   			glMaterialfv(GL_FRONT,GL_DIFFUSE, diffuse_torus);
-	   			glMaterialfv(GL_FRONT,GL_SPECULAR, specular_torus);
-	   			glMaterialf (GL_FRONT, GL_SHININESS, 76.8);
+          glDisable(GL_TEXTURE_2D);
+          glDepthMask (GL_FALSE);
+          glMaterialfv(GL_FRONT,GL_AMBIENT, ambient_torus);
+          glMaterialfv(GL_FRONT,GL_DIFFUSE, diffuse_torus);
+          glMaterialfv(GL_FRONT,GL_SPECULAR, specular_torus);
+          glMaterialf (GL_FRONT, GL_SHININESS, 76.8);
 
 #ifdef USE_BINDBUFFER
-	      DrawMesh(vbo4, vinx4, FACES4_COUNT);
+        DrawMesh(vbo4, vinx4, FACES4_COUNT);
 #else
-	      DrawMesh(FACES4_COUNT, (char *)&vertexs4, (char *)&indexes4);
+        DrawMesh(FACES4_COUNT, (char *)&vertexs4, (char *)&indexes4);
 #endif
        glColor3f(1.0,1.0,1.0);
-	      glDisable(GL_CULL_FACE);
+       glDisable(GL_CULL_FACE);
        glPolygonMode(GL_FRONT_AND_BACK,GL_LINE);
        glRotatef(90.0,1.0,0.0,0.0);
        glTranslatef(-1.0,0.7,0.7);

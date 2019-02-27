@@ -503,8 +503,8 @@ static VMfloat calc_wall_collision_time( BallType * ball, BorderType * wall )
         ph = vec_mul(ball->v,r)/vec_abssq(ball->v);
         q  = (vec_abssq(r) - ball->d*ball->d/4.0)/vec_abssq(v);
         if(ph*ph>q){
-	        t1 = -ph+sqrt(ph*ph-q);
-   	     t2 = -ph-sqrt(ph*ph-q);
+           t1 = -ph+sqrt(ph*ph-q);
+         t2 = -ph-sqrt(ph*ph-q);
         } else {
            t1 = SQRTM1;
            t2 = SQRTM1;
@@ -706,7 +706,7 @@ void remove_balls_from_game( BallsType *balls, struct Player * player)
                if(options_gamemode==options_gamemode_tournament && player[0].is_AI && player[1].is_AI) {
                   //nosound
                } else {
-               	  PLAY_NOISE(wave_outball,options_snd_volume-10);
+                  PLAY_NOISE(wave_outball,options_snd_volume-10);
                }
             }
 #endif
@@ -977,10 +977,10 @@ int proceed_dt(BallsType *balls, BordersType *borders, VMfloat dt, struct Player
                if(options_gamemode==options_gamemode_tournament && player[0].is_AI && player[1].is_AI) {
                   //nosound
                } else {
-               	  PLAY_NOISE(ball_hole,options_snd_volume-5);
+                  PLAY_NOISE(ball_hole,options_snd_volume-5);
                   balls->ball[i].soundplayed = 1;
                   if(balls->ball[i].nr == 0) { //white ball
-                  	 PLAY_NOISE(wave_smack,options_snd_volume-10);
+                    PLAY_NOISE(wave_smack,options_snd_volume-10);
                     balls->ball[i].soundplayed = 1;
                   }
                }

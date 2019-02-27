@@ -24,9 +24,9 @@
 #ifndef VERTEX_STRUCT
 #define VERTEX_STRUCT
 struct vertex_struct{
-	float x, y, z;
-	float nx,ny,nz;
-	float u,v;
+    float x, y, z;
+    float nx,ny,nz;
+    float u,v;
 };
 #endif
 struct vertex_struct vertexs3[]=

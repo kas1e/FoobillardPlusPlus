@@ -430,7 +430,7 @@ void menu_choose(menuType ** menu)
                 //nothing to do?
                 //to short
                 if(utf8count((*menu)->entry[(*menu)->select_index].text_obj->str) < (size_t)((*menu)->entry[(*menu)->select_index].minvalue+(*menu)->entry[(*menu)->select_index].fixedlen)) {
-                	  PLAY_NOISE(wave_bomb,options_snd_volume);
+                      PLAY_NOISE(wave_bomb,options_snd_volume);
                 return;
                 }
                 break;
@@ -438,7 +438,7 @@ void menu_choose(menuType ** menu)
                 // to small or to big
                (*menu)->entry[(*menu)->select_index].arg = (void *)&((*menu)->entry[(*menu)->select_index].text_obj->str[(*menu)->entry[(*menu)->select_index].fixedlen]);
                 if( atoi((*menu)->entry[(*menu)->select_index].arg) < (*menu)->entry[(*menu)->select_index].minvalue || atoi((*menu)->entry[(*menu)->select_index].arg) > (*menu)->entry[(*menu)->select_index].maxvalue) {
-                	  PLAY_NOISE(wave_bomb,options_snd_volume);
+                      PLAY_NOISE(wave_bomb,options_snd_volume);
                 return;
                 }
                 break;
@@ -446,7 +446,7 @@ void menu_choose(menuType ** menu)
                 // correct netaddress format
                (*menu)->entry[(*menu)->select_index].arg = (void *)&((*menu)->entry[(*menu)->select_index].text_obj->str[(*menu)->entry[(*menu)->select_index].fixedlen]);
                 if(!is_valid_ip((*menu)->entry[(*menu)->select_index].arg)) {
-                	  PLAY_NOISE(wave_bomb,options_snd_volume);
+                      PLAY_NOISE(wave_bomb,options_snd_volume);
                 return;
                 }
                 break;

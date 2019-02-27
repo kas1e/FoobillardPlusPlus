@@ -36,7 +36,7 @@
 #include "vmath.h"
 
 #ifdef __MINGW32__
-	extern void ( APIENTRY * glActiveTextureARB)( GLenum );
+    extern void ( APIENTRY * glActiveTextureARB)( GLenum );
 #endif
 
 /***********************************************************************/
@@ -1000,10 +1000,10 @@ void grayen_color( GLfloat * col )
 /***********************************************************************/
 
 int create_table( int reflect_bind, BordersType *borders, int carambol ) {
-	   // parameter borders only used for debugging at the end of the function
-	   // no error and not much time to work with it. Don't optimize this
+       // parameter borders only used for debugging at the end of the function
+       // no error and not much time to work with it. Don't optimize this
 
-	   //VMfloat cm  =  0.01;  // cm (for debugging in function my_glBox)
+       //VMfloat cm  =  0.01;  // cm (for debugging in function my_glBox)
 
     static int bumpref_init = 0;
     static int bump_init = 0;
@@ -1220,7 +1220,7 @@ int create_table( int reflect_bind, BordersType *borders, int carambol ) {
              glTexCoord2f( TABLETEXCOORD_X((x)*(f1),(y)*(f2)), TABLETEXCOORD_Y((x)*(f1),(y)*(f2)) ); \
              glVertex3f((x)*(f1),(y)*(f2),z);
    /*lower, upper*/
-   	   glNormal3f(0.0,0.0,1.0); // see some rows later, this here is new line ### TODO ### checkpoint
+       glNormal3f(0.0,0.0,1.0); // see some rows later, this here is new line ### TODO ### checkpoint
        for(i=0;i<2;i++){
            glFrontFace(i==0?GL_CW:GL_CCW);
            glBegin(GL_QUAD_STRIP);

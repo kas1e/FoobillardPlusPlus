@@ -61,9 +61,9 @@ typedef struct Vect VMvect;
 #else // no use of SSE intrinsics
 
 struct Vect {
- 	VMfloat x,y,z;
- 	};
- 	typedef struct Vect VMvect;
+    VMfloat x,y,z;
+};
+typedef struct Vect VMvect;
 
 #endif
 

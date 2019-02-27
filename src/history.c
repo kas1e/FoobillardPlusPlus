@@ -47,14 +47,14 @@ static char file_name[512];
  *                     is then free for xml-write                      *
  ***********************************************************************/
 void history_clear(void) {
-	 history = 0;
+    history = 0;
 }
 /***********************************************************************
  *                         set history status                          *
  *                 is then not free for xml-write                      *
  ***********************************************************************/
 void history_set(void) {
-	 history = 1;
+    history = 1;
 }
 
 /***********************************************************************
@@ -62,7 +62,7 @@ void history_set(void) {
  ***********************************************************************/
 
 int history_free(void) {
-	 return(history);
+    return(history);
 }
 
 /***********************************************************************
@@ -71,7 +71,7 @@ int history_free(void) {
  ***********************************************************************/
 
 void get_history(char *strpointer) {
-	 strcpy(strpointer,file_name);
+    strcpy(strpointer,file_name);
 }
 
 /***********************************************************************
@@ -80,10 +80,10 @@ void get_history(char *strpointer) {
 
 int check_xml(char *filecheck) {
 
-	  char file[1024];
+    char file[1024];
 
-	  sprintf(file,"%s/html/%s",file_name,filecheck);
-      return(file_exists(file));
+    sprintf(file,"%s/html/%s",file_name,filecheck);
+    return(file_exists(file));
 }
 
 /***********************************************************************
@@ -91,20 +91,20 @@ int check_xml(char *filecheck) {
  ***********************************************************************/
 
 void show_history(char * historyfile) {
-	  char workstring[1024];
-	  // build the browser call string
+    char workstring[1024];
+    // build the browser call string
 #ifdef USE_WIN
-	  sprintf(workstring,"%s/html/%s",file_name,historyfile);
+    sprintf(workstring,"%s/html/%s",file_name,historyfile);
 #else
-	  char callstring[1024];
-	  get_browser(callstring);
-	  #ifdef __amigaos4__
-	  sprintf(workstring," %s%s/html/%s",callstring,get_data_dir(), historyfile);
-	  #else
-	  sprintf(workstring," %s%s/html/%s",callstring,file_name,historyfile);
-	  #endif
+    char callstring[1024];
+    get_browser(callstring);
+    #ifdef __amigaos4__
+    sprintf(workstring," %s%s/html/%s",callstring,get_data_dir(), historyfile);
+    #else
+    sprintf(workstring," %s%s/html/%s",callstring,file_name,historyfile);
+    #endif
 #endif
-	  launch_command(workstring);
+    launch_command(workstring);
 
 }
 
@@ -155,7 +155,7 @@ void file_tournament_history( struct TournamentState_ * ts, char *winner, enum g
         for(i=0;i<=ts->round_ind;i++) {
              for(j=0;j<(1<<(ts->round_num-i-1));j++){
                  fprintf(wfp,"<g%i>\n<go>%i</go>\n<p1>%s</p1>\n<p2>%s</p2>\n",
-                 		 i+1,j+1,ts->roster.player[ts->game[i][j].roster_player1].name,ts->roster.player[ts->game[i][j].roster_player2].name);
+                         i+1,j+1,ts->roster.player[ts->game[i][j].roster_player1].name,ts->roster.player[ts->game[i][j].roster_player2].name);
                  if(ts->game[i][j].winner == 0) {
                     fprintf(wfp,"<w>%s</w>\n",ts->roster.player[ts->game[i][j].roster_player1].name);
                  } else {
@@ -182,14 +182,14 @@ void file_tournament_history( struct TournamentState_ * ts, char *winner, enum g
 
 void file_history(char *player1, char *player2, char *winner, int hits, int rounds,enum gameType gametype) {
 
-	  /* gametype enum from billmove.h GAME_8BALL, GAME_9BALL, GAME_CARAMBOL, GAME_SNOOKER
+      /* gametype enum from billmove.h GAME_8BALL, GAME_9BALL, GAME_CARAMBOL, GAME_SNOOKER
     localeText[432] etc.*/
    //fprintf(stderr,"Start: %s, %s, %s, %i, %i, %i\n",player1,player2,winner,hits,rounds,gametype);
-	  FILE *fp, *wfp;
+   FILE *fp, *wfp;
    char historyfile[1024];  // no file with directory should be longer
    char newfile[1024];      // no file with directory should be longer
    char checkstring[2048];  // no entry inside the history-file should be longer
-  	char datestring[25];
+   char datestring[25];
    time_t rawtime;
    struct tm * timeinfo;
 
@@ -197,30 +197,30 @@ void file_history(char *player1, char *player2, char *winner, int hits, int roun
    timeinfo = localtime(&rawtime);
    snprintf(datestring,sizeof(datestring),"%02d.%02d.%04d %02d:%02d:%02d",timeinfo->tm_mday,timeinfo->tm_mon+1,timeinfo->tm_year+1900,timeinfo->tm_hour,timeinfo->tm_min,timeinfo->tm_sec);
    //fprintf(stderr,"%s\n",datestring);
-	  if(check_xml("history.xml")) {
+   if(check_xml("history.xml")) {
      // write new history to the file
      snprintf(historyfile,sizeof(historyfile),"%s/html/%s",file_name,"history.xml");
      snprintf(newfile,sizeof(newfile),"%s/html/%s",file_name,"history.tmp");
-		   if((fp=fopen(historyfile,"r"))) {
+     if((fp=fopen(historyfile,"r"))) {
         if((wfp=fopen(newfile,"w+"))) {
-		   	    while(fgets(checkstring, sizeof(checkstring), fp) != NULL) {
-		   	  	    if(strstr(checkstring,"</start>")) {
-		   	  	  	   break;
-		   	  	    } else {
-		   	  	      fprintf(wfp,"%s",checkstring);
-		   	  	    }
-		        }
+                while(fgets(checkstring, sizeof(checkstring), fp) != NULL) {
+                    if(strstr(checkstring,"</start>")) {
+                      break;
+                    } else {
+                      fprintf(wfp,"%s",checkstring);
+                    }
+                }
         fprintf(wfp,"<%s>\n<date>%s</date>\n<player1>%s</player1>\n<player2>%s</player2>\n<winner>%s</winner>\n<hits>%i</hits>\n<rounds>%i</rounds>\n</%s>\n</start>\n",
-        		  localeText[432+gametype],datestring,player1,player2,winner,hits,rounds,localeText[432+gametype]);
-  	     fclose(fp);
-  	     fclose(wfp);
-  	     remove(historyfile);
-  	     rename(newfile,historyfile);
-		      } else {
-		        fclose(fp);
-		      }
-		   }
-	  }
+                  localeText[432+gametype],datestring,player1,player2,winner,hits,rounds,localeText[432+gametype]);
+         fclose(fp);
+         fclose(wfp);
+         remove(historyfile);
+         rename(newfile,historyfile);
+              } else {
+                fclose(fp);
+              }
+           }
+      }
 }
 
 /***********************************************************************
@@ -232,25 +232,25 @@ void parse_history(char *inputfile, char *outputfile) {
    FILE *fp,*wfp;
    int i;
    char *parseinput[] = {"Game History","8 ball","9 ball","Carom","Snooker","Date","Player 1","Player 2","Winner","Strokes",
-   		"Rounds","Tournament History","Game No.","Tournament Date","Round"};
+        "Rounds","Tournament History","Game No.","Tournament Date","Round"};
    char *parseoutput[] = {localeText[436],localeText[93],localeText[94],localeText[95],localeText[96],localeText[437],localeText[0],
-   		localeText[2],localeText[438],localeText[439],localeText[440],localeText[444],localeText[445],localeText[446],localeText[447]};
+        localeText[2],localeText[438],localeText[439],localeText[440],localeText[444],localeText[445],localeText[446],localeText[447]};
 #define ARRAYLEN 15
    char checkstring[2048];  // no entry inside the history-file should be longer
    char *buffer;
 
    if((fp=fopen(inputfile,"r"))) {
-   	  if((wfp=fopen(outputfile,"w+"))) {
-  	      while(fgets(checkstring, sizeof(checkstring), fp) != NULL) {
-  	      	 for(i=0;i< ARRAYLEN ;i++) {
-  	      	 	 buffer=replace(checkstring, parseinput[i], parseoutput[i]);
-	            strcpy(checkstring,buffer);
-  	      	 }
-  	      	 fprintf(wfp,"%s",checkstring);
-  	      }
-  	   fclose(wfp);
-   	  }
-  	   fclose(fp);
+      if((wfp=fopen(outputfile,"w+"))) {
+          while(fgets(checkstring, sizeof(checkstring), fp) != NULL) {
+             for(i=0;i< ARRAYLEN ;i++) {
+                buffer=replace(checkstring, parseinput[i], parseoutput[i]);
+                strcpy(checkstring,buffer);
+             }
+             fprintf(wfp,"%s",checkstring);
+          }
+       fclose(wfp);
+       }
+       fclose(fp);
    }
 #undef ARRAYLEN
 }
@@ -261,7 +261,7 @@ void parse_history(char *inputfile, char *outputfile) {
 
 void init_history(void) {
 
-	  char *filenames[] = {"body-bg.png","content-bg.png","feature.jpg","footer-bg.png","gradient-shadow.png","header-bg.jpg","logo.jpg","sidebar-h3-bg.jpg"};
+   char *filenames[] = {"body-bg.png","content-bg.png","feature.jpg","footer-bg.png","gradient-shadow.png","header-bg.jpg","logo.jpg","sidebar-h3-bg.jpg"};
 #define ARRAYLEN 8
    char directorycheck[1024];
    char directorycheck1[1024];
@@ -284,8 +284,8 @@ void init_history(void) {
    checktournament = check_xml("tournament.xml");
    checkhistory = check_xml("history.xml");
    if(!checkhistory || !checktournament) {
-   	  //only build, if no xml-file is there
-   	  //fprintf(stderr,"Call only one time\n");
+      //only build, if no xml-file is there
+      //fprintf(stderr,"Call only one time\n");
 #ifdef USE_WIN
       sprintf(directorycheck,"%s/html",file_name);
       mkdir(directorycheck);
@@ -298,28 +298,28 @@ void init_history(void) {
       mkdir(directorycheck1,0777);
 #endif
       if(!chdir("html") ) {
-      	if(!checkhistory) {
+        if(!checkhistory) {
          sprintf(copy_file,"%s/%s",directorycheck,"history.xsl");
          filecopy("history.xsl",copy_file);
          sprintf(copy_file,"%s/%s",directorycheck,"history.xml");
          parse_history("history.xml",copy_file);
-      	}
-      	if(!checktournament) {
+        }
+        if(!checktournament) {
          sprintf(copy_file,"%s/%s",directorycheck,"tournament.xsl");
          filecopy("tournament.xsl",copy_file);
          sprintf(copy_file,"%s/%s",directorycheck,"tournament.xml");
          parse_history("tournament.xml",copy_file);
-      	}
+        }
          sprintf(copy_file,"%s/%s",directorycheck,"styles.css");
          filecopy("styles.css",copy_file);
          if(!chdir("images")) {
-         	for(i=0;i< ARRAYLEN ;i++) {
+            for(i=0;i< ARRAYLEN ;i++) {
             sprintf(copy_file,"%s/%s",directorycheck1,filenames[i]);
             filecopy(filenames[i],copy_file);
-         	}
+            }
             chdir("../..");
          } else {
-         	chdir("..");
+            chdir("..");
          }
       }
     }

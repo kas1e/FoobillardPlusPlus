@@ -216,8 +216,8 @@ VMvect ai_get_stroke_dir_8ball( BallsType * balls, BordersType * walls, struct P
 /***********************************************************************/
 
 VMvect ai_get_stroke_dir_9ball( BallsType * balls, BordersType * walls, struct Player * pplayer ) {
-	   // pplayer not used in function, but needed from other calls to set_ai_get_stroke_dir
-	   // Don't optimize this
+    // pplayer not used in function, but needed from other calls to set_ai_get_stroke_dir
+    // Don't optimize this
     VMvect r_hit;
     VMfloat angle;
     VMfloat minangle = M_PI;
@@ -407,8 +407,8 @@ VMvect ai_get_stroke_dir_snooker( BallsType * balls, BordersType * walls, struct
 /***********************************************************************/
 
 VMvect ai_get_stroke_dir_carambol( BallsType * balls, BordersType * walls, struct Player * pplayer ) {
-	   // walls not used, but needed as set as function pointer
-	   // Don't optimize this
+    // walls not used, but needed as set as function pointer
+    // Don't optimize this
 #define CUE_BALL_IND (pplayer->cue_ball)
     int i,j,k;
     int foundshot=0;

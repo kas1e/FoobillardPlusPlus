@@ -373,7 +373,7 @@ void getStringPixmapFT(char *str, char *fontname, int font_height, char ** data,
 
 /***********************************************************************/
 
-#ifdef __MINGW32__	//RB
+#ifdef __MINGW32__  //RB
   void APIENTRY my_Vertex_cb(void * data)
 #else
   void my_Vertex_cb(void * data)
